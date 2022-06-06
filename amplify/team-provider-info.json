@@ -9,7 +9,22 @@
       "UnauthRoleName": "amplify-greatings-dev-160111-unauthRole",
       "StackName": "amplify-greatings-dev-160111",
       "StackId": "arn:aws:cloudformation:eu-west-3:735279496009:stack/amplify-greatings-dev-160111/1ef34ec0-e5a1-11ec-9fb2-069c06b1fff4",
-      "AmplifyAppId": "d13875wddku0d"
+      "AmplifyAppId": "d13875wddku0d",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-greatings-dev-160111-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "greatingsce0342ff": {}
+      },
+      "function": {
+        "greatingsce0342ffCustomMessage": {
+          "REDIRECTURL": "https://gr-eat-ings.vercel.app/",
+          "EMAILSUBJECT": "Gre-eat-ings account confirmation",
+          "EMAILMESSAGE": "Account regirstration confirmed",
+          "deploymentBucketName": "amplify-greatings-dev-160111-deployment",
+          "s3Key": "amplify-builds/greatingsce0342ffCustomMessage-687862374455396c5077-build.zip"
+        }
+      }
     }
   }
 }
