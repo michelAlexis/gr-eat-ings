@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "greatings",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "C:\\dev\\projects\\gr-eat-ings\\amplify\\backend\\api\\greatings\\schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    }
+  }
+}
