@@ -1,4 +1,5 @@
 import { Auth } from '@aws-amplify/auth';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import gql from 'graphql-tag';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -54,5 +55,5 @@ const IndexPage = () => {
   );
 };
 
-// export default withAuthenticator(IndexPage);
-export default IndexPage;
+export default withAuthenticator(IndexPage);
+// export default IndexPage;
