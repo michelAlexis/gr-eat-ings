@@ -46,7 +46,7 @@ const IndexPage = () => {
         Ingreditents:
         <ul>
           {ingredients.map((e) => (
-            <li>{e.name}</li>
+            <li key={e.id}>{e.name}</li>
           ))}
         </ul>
       </div>
