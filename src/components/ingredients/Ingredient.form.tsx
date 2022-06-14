@@ -4,13 +4,18 @@ import { CreateIngredientInput } from '../../API';
 
 export interface IngredientFormProps {}
 
-export const CreateIngredientForm = (props: IngredientFormProps) => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<CreateIngredientInput>();
+export const CreateIngredientForm = (_: IngredientFormProps) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<CreateIngredientInput>();
   const onSubmit = (data: CreateIngredientInput) => console.log(data, errors);
   const onInvalid = (error: FieldErrors<CreateIngredientInput>) => console.warn('invalid', error.name);
   useEffect(() => {
     watch((value, { name, type }) => console.log('watch', value, name, type));
-  }, []);
+  }, [watch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
