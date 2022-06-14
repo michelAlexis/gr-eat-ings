@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { Ingredient, ListIngredientsQuery } from '../../src/API';
 import { listIngredients } from '../../src/graphql/queries';
+import CreateIngredientForm from '../components/ingredients/Ingredient.form';
 import Layout from '../components/Layout';
 import AwsClient from '../services/aws-client';
 
@@ -44,12 +45,17 @@ const IndexPage = () => {
       <p>Hello {user}</p>
 
       <div>
-        Ingreditents:
+        <h2>Ingreditents:</h2>
         <ul>
           {ingredients.map((e) => (
             <li key={e.id}>{e.name}</li>
           ))}
         </ul>
+      </div>
+
+      <div>
+        <h2>Formulaire</h2>
+        <CreateIngredientForm></CreateIngredientForm>
       </div>
     </Layout>
   );
