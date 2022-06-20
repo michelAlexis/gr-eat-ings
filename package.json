@@ -10,13 +10,15 @@
     "@aws-amplify/auth": "4.5.6",
     "@aws-amplify/core": "4.5.6",
     "@aws-amplify/ui-react": "2.19.0",
+    "@prisma/client": "3.15.2",
     "aws-amplify": "4.3.24",
     "aws-appsync": "4.1.6",
     "graphql-tag": "2.12.6",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-hook-form": "7.32.1"
+    "react-hook-form": "7.32.1",
+    "zod": "^3.17.3"
   },
   "devDependencies": {
     "@types/node": "17.0.40",
@@ -32,6 +34,7 @@
     "postcss": "8.4.14",
     "postcss-preset-env": "7.7.1",
     "prettier": "2.7.0",
+    "prisma": "3.15.2",
     "tailwindcss": "3.0.24",
     "typescript": "4.7.3"
   }
