@@ -1,13 +1,12 @@
+import type { ListIngredientsQuery } from '@/API';
+import Layout from '@/components/Layout';
+import { listIngredients } from '@/graphql/queries';
+import { useQuery } from '@/utils/aws-utils';
 import { Auth } from '@aws-amplify/auth';
 import { withAuthenticator } from '@aws-amplify/ui-react';
-import gql from 'graphql-tag';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import type { Ingredient, ListIngredientsQuery } from '../../src/API';
-import { listIngredients } from '../../src/graphql/queries';
 import CreateIngredientForm from '../components/ingredients/Ingredient.form';
-import Layout from '../components/Layout';
-import AwsClient from '../services/aws-client';
 
 const IndexPage = () => {
   // User
@@ -21,18 +20,7 @@ const IndexPage = () => {
   }, []);
 
   // ingredients
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-
-  useEffect(() => {
-    AwsClient.query<ListIngredientsQuery>({
-      query: gql(listIngredients),
-    }).then(({ data }) => {
-      console.log('ingredients', data.listIngredients?.items);
-      if (data.listIngredients?.items) {
-        setIngredients(data.listIngredients.items as Ingredient[]);
-      }
-    });
-  }, []);
+  const { data, error, loading, refetch } = useQuery<ListIngredientsQuery>(listIngredients);
 
   return (
     <Layout title="Home | Next.js + TypeScript Example">
@@ -46,16 +34,16 @@ const IndexPage = () => {
 
       <div>
         <h2>Ingreditents:</h2>
-        <ul>
-          {ingredients.map((e) => (
-            <li key={e.id}>{e.name}</li>
-          ))}
-        </ul>
+
+        {loading && <span>Loading...</span>}
+        {error && <span>Error : {error}</span>}
+
+        {data?.listIngredients?.items && <ul>{data.listIngredients?.items.map((e) => e && <li key={e.id}>{e.name}</li>)}</ul>}
       </div>
 
       <div>
         <h2>Formulaire</h2>
-        <CreateIngredientForm></CreateIngredientForm>
+        <CreateIngredientForm onCreate={() => refetch()}></CreateIngredientForm>
       </div>
     </Layout>
   );
