@@ -1,7 +1,6 @@
 import { Amplify } from '@aws-amplify/core';
 import '@aws-amplify/ui-react/styles.css';
 import { AppProps } from 'next/app';
-import React from 'react';
 import awsconfig from '../aws-exports';
 import '../styles/index.css';
 

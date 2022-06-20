@@ -1,4 +1,4 @@
-import { AWSAppSyncClient, AUTH_TYPE } from 'aws-appsync';
+import { AUTH_TYPE, AWSAppSyncClient } from 'aws-appsync';
 import awsconfig from '../aws-exports';
 
 export const awsclient = new AWSAppSyncClient({
