@@ -41,7 +41,7 @@ export const CreateIngredientForm: FC<IngredientFormProps> = (props) => {
       {/* Name */}
       <div className="flex flex-col">
         <label htmlFor="name-input">Name *: </label>
-        <input id="name-input" {...register('name', { required: 'This field is required' })} />
+        <input id="name-input" {...register('name', { required: 'This field is required' })} autoComplete="off" className="text-black" />
         {errors.name && <span className="text-red-600">{errors.name.message}</span>}
       </div>
 
