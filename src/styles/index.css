@@ -1,4 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* test deploy */
+
+body {
+    @apply bg-slate-600 text-slate-50;
+}

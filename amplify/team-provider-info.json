@@ -22,7 +22,7 @@
           "EMAILSUBJECT": "Gre-eat-ings account confirmation",
           "EMAILMESSAGE": "Account regirstration confirmed",
           "deploymentBucketName": "amplify-greatings-dev-160111-deployment",
-          "s3Key": "amplify-builds/greatingsce0342ffCustomMessage-687862374455396c5077-build.zip"
+          "s3Key": "amplify-builds/greatingsce0342ffCustomMessage-6b306a54516438734d49-build.zip"
         }
       }
     }
