@@ -37,11 +37,8 @@ export const CreateIngredientForm: FC<IngredientFormProps> = () => {
   const mutation = trpc.useMutation('create-ingredient');
 
   const onSubmit = async (data: Ingredient) => {
-    mutation.mutate(data, {
-      onSettled(data, error, variables, context) {
-        reset();
-      },
-    });
+    await mutation.mutateAsync(data);
+    reset();
   };
 
   const onInvalid = (error: FieldErrors<CreateIngredientInput>) => console.warn('invalid', error.name);
