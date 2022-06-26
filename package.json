@@ -11,6 +11,10 @@
     "@aws-amplify/core": "4.5.6",
     "@aws-amplify/ui-react": "2.19.0",
     "@prisma/client": "3.15.2",
+    "@trpc/client": "9.25.3",
+    "@trpc/next": "9.25.3",
+    "@trpc/react": "9.25.3",
+    "@trpc/server": "9.25.3",
     "aws-amplify": "4.3.24",
     "aws-appsync": "4.1.6",
     "graphql-tag": "2.12.6",
@@ -18,7 +22,8 @@
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-hook-form": "7.32.1",
-    "zod": "^3.17.3"
+    "react-query": "3.39.1",
+    "zod": "3.17.3"
   },
   "devDependencies": {
     "@types/node": "17.0.40",

@@ -1,11 +1,20 @@
-import { Amplify } from '@aws-amplify/core';
-import '@aws-amplify/ui-react/styles.css';
+import type { AppRouter } from '@/backend/router/router';
+import { withTRPC } from '@trpc/next';
 import { AppProps } from 'next/app';
-import awsconfig from '../aws-exports';
 import '../styles/index.css';
 
-Amplify.configure(awsconfig);
+// Amplify.configure(awsconfig);
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
 }
+
+export default withTRPC<AppRouter>({
+  config({ ctx }) {
+    const url = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/api/trpc` : 'http://localhost:3000/api/trpc';
+    return {
+      url,
+    };
+  },
+  ssr: true,
+})(MyApp);
