@@ -6,7 +6,7 @@
   "singleQuote": true,
   "jsxSingleQuote": false,
   "printWidth": 140,
-  "endOfLine": "crlf",
+  "endOfLine": "auto",
   "bracketSameLine": true,
 
   "overrides": [
