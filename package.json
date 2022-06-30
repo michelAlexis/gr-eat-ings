@@ -5,7 +5,8 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "diff": "prisma migrate dev --create-only"
   },
   "dependencies": {
     "@prisma/client": "3.15.2",
@@ -21,6 +22,7 @@
     "zod": "3.17.3"
   },
   "devDependencies": {
+    "@hookform/devtools": "4.1.0",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "13.3.0",
     "@types/jest": "28.1.3",

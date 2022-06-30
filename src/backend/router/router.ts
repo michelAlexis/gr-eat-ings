@@ -50,10 +50,24 @@ export const appRouter = trpc
   .mutation('create-ingredient', {
     input: z.object({
       name: z.string()?.min(1).max(100),
+      nutritions: z
+        .array(
+          z.object({
+            kcal: z.number().min(0),
+          })
+        )
+        .min(1),
     }),
     resolve: async ({ input }) => {
       return await prisma.ingredient.create({
-        data: input,
+        data: {
+          name: input.name,
+          nutritions: {
+            createMany: {
+              data: input.nutritions,
+            },
+          },
+        },
       });
     },
   })

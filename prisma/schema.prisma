@@ -13,11 +13,67 @@ datasource db {
 model Ingredient {
   id String @id @default(cuid())
 
-  name      String   @db.VarChar(100)
-  kcal      Int?
+  name String @db.VarChar(100)
+
+  nutritions Nutrition[]
+
   // audit
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  IngredientQuantity IngredientQuantity[]
   @@fulltext([name])
+}
+
+model Nutrition {
+  id String @id @default(cuid())
+
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  denomination String @db.VarChar(100)
+  kcal         Int?
+
+  // audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Unit {
+  unique
+  gr
+  kg
+  ml
+  l
+}
+
+model IngredientQuantity {
+  id String @id @default(cuid())
+
+  recipeId String
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  ingredientId String
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  quantity Float @db.Float
+  unit     Unit
+
+  // audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([recipeId, ingredientId])
+}
+
+model Recipe {
+  id String @id @default(cuid())
+
+  name          String @db.VarChar(100)
+  sizeReference Int
+
+  // audit
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  IngredientQuantity IngredientQuantity[]
 }
