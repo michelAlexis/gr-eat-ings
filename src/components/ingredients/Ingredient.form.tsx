@@ -13,27 +13,6 @@ export const CreateIngredientForm: FC<IngredientFormProps> = () => {
     reset,
     formState: { errors },
   } = useForm<Ingredient>();
-
-  //? using AwsAmplify
-  // const onSubmit = async (data: CreateIngredientInput) => {
-  //   const result = await Awsclient.mutate<CreateIngredientMutation>({
-  //     mutation: gql(createIngredient),
-  //     variables: {
-  //       input: {
-  //         ...data,
-  //       },
-  //     },
-  //   });
-  //   console.log('New restult', result);
-  //   if (result.data?.createIngredient) {
-  //     props.onCreate(result.data.createIngredient);
-  //     reset();
-  //   } else {
-  //     console.warn('No result on save', result);
-  //   }
-  // };
-
-  //? Using trpc
   const mutation = trpc.useMutation('create-ingredient');
 
   const onSubmit = async (data: Ingredient) => {
