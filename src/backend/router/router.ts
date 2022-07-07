@@ -38,39 +38,52 @@ export const appRouter = trpc
       query: z.string(),
     }),
     resolve: async ({ input }) => {
+      console.log('Query to search ingredients:', input);
+      if (!input.query || input.query.length < 3) {
+        return [];
+      }
+
       return prisma.ingredient.findMany({
         where: {
           name: {
-            search: input.query,
+            contains: input.query,
           },
+        },
+        take: 50,
+        orderBy: {
+          name: 'asc',
+        },
+        select: {
+          id: true,
+          name: true,
         },
       });
     },
   })
-  .mutation('create-ingredient', {
-    input: z.object({
-      name: z.string()?.min(1).max(100),
-      nutritions: z
-        .array(
-          z.object({
-            kcal: z.number().min(0),
-          })
-        )
-        .min(1),
-    }),
-    resolve: async ({ input }) => {
-      return await prisma.ingredient.create({
-        data: {
-          name: input.name,
-          nutritions: {
-            createMany: {
-              data: input.nutritions,
-            },
-          },
-        },
-      });
-    },
-  })
+  // .mutation('create-ingredient', {
+  //   input: z.object({
+  //     name: z.string()?.min(1).max(100),
+  //     nutritions: z
+  //       .array(
+  //         z.object({
+  //           kcal: z.number().min(0),
+  //         })
+  //       )
+  //       .min(1),
+  //   }),
+  //   resolve: async ({ input }) => {
+  //     return await prisma.ingredient.create({
+  //       data: {
+  //         name: input.name,
+  //         nutritions: {
+  //           createMany: {
+  //             data: input.nutritions,
+  //           },
+  //         },
+  //       },
+  //     });
+  //   },
+  // })
   .mutation('delete-ingredient', {
     input: z.object({
       id: z.string(),
