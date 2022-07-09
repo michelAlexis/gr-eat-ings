@@ -29,6 +29,13 @@ export const appRouter = trpc
         select: {
           id: true,
           name: true,
+          nutritions: {
+            select: {
+              id: true,
+              denomination: true,
+              kcal: true,
+            },
+          },
         },
       });
     },

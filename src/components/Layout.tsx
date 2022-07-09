@@ -7,7 +7,7 @@ type Props = {
   title?: string;
 };
 
-const Layout = ({ children, title = 'This is the default title' }: Props) => (
+export const Layout = ({ children, title = 'This is the default title' }: Props) => (
   <>
     <Head>
       <title>{title}</title>

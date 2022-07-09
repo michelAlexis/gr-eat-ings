@@ -1,7 +1,8 @@
 import IngredientList from '@/components/ingredients/Ingredient.list';
 import Layout from '@/components/Layout';
+import { NextPage } from 'next';
 
-const IndexPage = () => {
+export const IndexPage: NextPage = () => {
   return (
     <Layout title="Ingredients">
       <div className="flex flex-col items-center">
