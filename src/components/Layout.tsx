@@ -15,14 +15,21 @@ export const Layout = ({ children, title = 'This is the default title' }: Props)
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </Head>
     <header>
-      <nav>
+      <nav className="ml-4 mt-2">
         <Link href="/">
           <a>Home</a>
         </Link>
+
         <span className="mx-4">|</span>
         <Link href="/ingredients">
           <a>Ingredients</a>
         </Link>
+
+        <span className="mx-4">|</span>
+        <Link href="/ingredients/calculator">
+          <a>Calculator</a>
+        </Link>
+
         <span className="mx-4">|</span>
         <Link href="/about">
           <a>About</a>

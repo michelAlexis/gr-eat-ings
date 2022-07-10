@@ -1,14 +1,14 @@
 import { trpc } from '@/utils/trpc';
 import { FC, useState } from 'react';
-import { IngredientAutocomplete } from './IngredientAutocomplete';
+import { IngredientAutocomplete } from './IngredientSearch.autocomplete';
 import { IngredientDetail } from './IngredientDetail';
 
 interface Props {}
 
 export const IngredientList: FC<Props> = () => {
-  const { data, isLoading, refetch } = trpc.useQuery(['get-ingredients']);
+  const { data, isLoading, refetch } = trpc.useQuery(['ingredients.all']);
 
-  const deleteIngredient = trpc.useMutation('delete-ingredient');
+  const deleteIngredient = trpc.useMutation('ingredients.delete');
 
   const onDetele = async (id: string) => {
     await deleteIngredient.mutateAsync({ id });

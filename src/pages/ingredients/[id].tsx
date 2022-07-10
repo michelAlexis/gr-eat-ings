@@ -5,6 +5,7 @@ import { GetServerSideProps, NextPage } from 'next';
 
 const getIngredientDetail = async (id: string) => {
   const ingredient = await prisma.ingredient.findUnique({
+    rejectOnNotFound: true,
     where: {
       id,
     },
@@ -38,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   return { props: { ingredient } };
 };
 
-export const IngredientDetailPage: NextPage<{ ingredient?: IngredientDetail }> = ({ ingredient }) => {
+export const IngredientDetailPage: NextPage<{ ingredient: IngredientDetail }> = ({ ingredient }) => {
   if (!ingredient) {
     console.warn('No ingredient');
     return (

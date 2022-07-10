@@ -1,11 +1,11 @@
 import { inferQueryResponse } from '@/pages/api/trpc/[trpc]';
 import { trpc } from '@/utils/trpc';
-import { useDebounce } from '@/utils/userDebounce';
+import { useDebounce } from '@/utils/hooks/userDebounce';
 import { Combobox } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/solid';
 import { FC, Fragment, useEffect, useState } from 'react';
 
-type IngredientSearchResult = inferQueryResponse<'search-ingredient'>[number];
+type IngredientSearchResult = inferQueryResponse<'ingredients.search'>[number];
 type IngredientOption = IngredientSearchResult | { name: string; id: null };
 
 interface Props {
@@ -22,7 +22,7 @@ export const IngredientAutocomplete: FC<Props> = ({ onChange }) => {
   // Debound the query to prevent too fast fetching
   const debouncedQuery = useDebounce(query, 300);
 
-  const { refetch, isLoading } = trpc.useQuery(['search-ingredient', { query: debouncedQuery }], {
+  const { refetch, isLoading } = trpc.useQuery(['ingredients.search', { query: debouncedQuery }], {
     keepPreviousData: true,
     enabled: false,
     onSuccess: (r) => {

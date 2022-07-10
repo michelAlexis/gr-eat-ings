@@ -1,8 +1,8 @@
-import { Ingredient } from '@/models/ingredient.model';
 import { trpc } from '@/utils/trpc';
 import { FC } from 'react';
 import { Control, FieldErrors, useFieldArray, useForm, UseFormGetValues, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
+import { Ingredient } from '@prisma/client';
 
 export interface IngredientFormProps {}
 
@@ -24,7 +24,7 @@ export const CreateIngredientForm: FC<IngredientFormProps> = () => {
       ],
     },
   });
-  const mutation = trpc.useMutation('create-ingredient');
+  const mutation = trpc.useMutation('ingredients.create');
 
   const onSubmit = async (data: Ingredient) => {
     await mutation.mutateAsync(data);

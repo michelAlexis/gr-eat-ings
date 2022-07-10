@@ -1,16 +1,8 @@
-export type UnitType = 'unique' | 'solid' | 'liquid';
-export type Unit = 'unique' | 'gr' | 'kg' | 'ml' | 'l';
+import type { inferQueryResponse } from '@/pages/api/trpc/[trpc]';
+import type { Ingredient, IngredientUnit, Nutrition } from '@prisma/client';
 
-export interface Ingredient {
-  name: string;
-  unitRef: UnitType;
-  nutritions: Nutrition[];
-}
-
-export interface Nutrition {
-  denomination: 'ref' | string;
-  kcal: number;
-}
+export type IngredientSearchResult = inferQueryResponse<'ingredients.search'>[number];
+export type IngredientDetail = inferQueryResponse<'ingredients.by-id'>;
 
 export interface Recipe {
   name: string;
@@ -18,11 +10,13 @@ export interface Recipe {
   ingredients: IngredientQuantity[];
 }
 
-export interface Quantity {
+export interface Quantity<U extends IngredientUnit = IngredientUnit> {
   quantity: number;
-  unit: Unit;
+  unit: U;
 }
 
-export interface IngredientQuantity extends Quantity {
+export type NutritionData = Pick<Nutrition, 'kcal'>;
+
+export interface IngredientQuantity<U extends IngredientUnit = IngredientUnit> extends Quantity<U> {
   ingredient: Ingredient;
 }

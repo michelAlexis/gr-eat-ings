@@ -1,5 +1,5 @@
-import { Nutrition, Quantity } from '@/models/ingredient.model';
-import { mapQuantity, multifyNutrition, simplify } from './ingredient.utils';
+import { NutritionData, Quantity } from '@/models/ingredient.model';
+import { computeMultiplier, mapQuantity, multifyNutrition, simplify } from './ingredient.utils';
 
 describe('simplify function', () => {
   test('simplify kilo', () => {
@@ -24,15 +24,15 @@ describe('simplify function', () => {
 });
 
 describe('multiply nutrition function', () => {
-  const refNutrition: Nutrition = {
+  const refNutrition: NutritionData = {
     kcal: 100,
   };
 
   test('Should multiply nutrition', () => {
-    expect(multifyNutrition(refNutrition, 1)).toStrictEqual<Nutrition>({ kcal: 100 });
-    expect(multifyNutrition(refNutrition, 2)).toStrictEqual<Nutrition>({ kcal: 200 });
-    expect(multifyNutrition(refNutrition, 0)).toStrictEqual<Nutrition>({ kcal: 0 });
-    expect(multifyNutrition(refNutrition, 0.5)).toStrictEqual<Nutrition>({ kcal: 50 });
+    expect(multifyNutrition(refNutrition, 1)).toStrictEqual<NutritionData>({ kcal: 100 });
+    expect(multifyNutrition(refNutrition, 2)).toStrictEqual<NutritionData>({ kcal: 200 });
+    expect(multifyNutrition(refNutrition, 0)).toStrictEqual<NutritionData>({ kcal: 0 });
+    expect(multifyNutrition(refNutrition, 0.5)).toStrictEqual<NutritionData>({ kcal: 50 });
   });
 });
 
@@ -56,5 +56,20 @@ describe('mapQuantity function', () => {
     expect(mapQuantity(2, refQuantity, 1)).toStrictEqual<Quantity>({ quantity: 50, unit: 'gr' });
     expect(mapQuantity(2, refQuantity, 4)).toStrictEqual<Quantity>({ quantity: 200, unit: 'gr' });
     expect(mapQuantity(4, refQuantity, 10)).toStrictEqual<Quantity>({ quantity: 250, unit: 'gr' });
+  });
+});
+
+describe('computeMultiplier function', () => {
+  test('Should multiply from save unit', () => {
+    expect(computeMultiplier({ quantity: 100, unit: 'gr' }, { quantity: 100, unit: 'gr' })).toBe(1);
+    expect(computeMultiplier({ quantity: 100, unit: 'gr' }, { quantity: 1000, unit: 'gr' })).toBe(10);
+    expect(computeMultiplier({ quantity: 100, unit: 'gr' }, { quantity: 10, unit: 'gr' })).toBe(0.1);
+    expect(computeMultiplier({ quantity: 1, unit: 'unique' }, { quantity: 2, unit: 'unique' })).toBe(2);
+  });
+
+  test('Should transform from different unit', () => {
+    expect(computeMultiplier({ quantity: 100, unit: 'gr' }, { quantity: 0.1, unit: 'kg' })).toBe(1);
+    expect(computeMultiplier({ quantity: 100, unit: 'gr' }, { quantity: 1, unit: 'kg' })).toBe(10);
+    expect(computeMultiplier({ quantity: 1, unit: 'kg' }, { quantity: 100, unit: 'gr' })).toBe(0.1);
   });
 });

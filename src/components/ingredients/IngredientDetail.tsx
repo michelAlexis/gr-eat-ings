@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const IngredientDetail: FC<Props> = ({ id }) => {
-  const { data } = trpc.useQuery(['get-ingredient-by-id', { id }]);
+  const { data } = trpc.useQuery(['ingredients.by-id', { id }]);
 
   if (!data) return <div>Loading...</div>;
 
