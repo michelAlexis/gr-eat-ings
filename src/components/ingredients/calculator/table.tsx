@@ -1,6 +1,7 @@
 import { IngredientDetail, Quantity } from '@/models/ingredient.model';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { FC } from 'react';
+import QuantityInput from '../Quantity.input';
 
 function reduceNutrition(
   ingredients: { ingredient: IngredientDetail; multiplier: number; quantity: Quantity }[],
@@ -8,7 +9,7 @@ function reduceNutrition(
 ) {
   let anyMissing = false;
   const sum = ingredients.reduce((agg, i) => {
-    const refValue = i.ingredient.nutritions?.[0][key];
+    const refValue = i.ingredient.nutritions?.[0]?.[key];
 
     if (refValue) {
       const value = (+refValue ?? 0) * i.multiplier;
@@ -26,8 +27,9 @@ function reduceNutrition(
 
 export const IngredientCalculatorTable: FC<{
   data: { ingredient: IngredientDetail; multiplier: number; quantity: Quantity }[];
+  onUpdate: (rowIndex: number, colId: string, value: any) => void;
   onRemove: (id: string) => void;
-}> = ({ data, onRemove }) => {
+}> = ({ data, onRemove, onUpdate }) => {
   const columns: ColumnDef<{ ingredient: IngredientDetail; multiplier: number; quantity: Quantity }>[] = [
     {
       accessorFn: (i) => i.ingredient.name,
@@ -36,11 +38,16 @@ export const IngredientCalculatorTable: FC<{
     },
     {
       accessorFn: (i) => i.quantity,
-      cell: ({ cell }) => (
-        <span>
-          {cell.getValue<Quantity>().quantity} {cell.getValue<Quantity>().unit}
-        </span>
-      ),
+      cell: ({ cell, row, column }) => {
+        const quantity = cell.getValue<Quantity>();
+        const onChange = (input: string) => {
+          if (input.length > 1) {
+            onUpdate(row.index, column.id, { ...quantity, quantity: +input });
+          }
+        };
+        return <QuantityInput defaultValue={quantity} onChange={onChange} />;
+      },
+      id: 'quantity',
       header: 'Quantity',
       footer: '',
     },
@@ -57,6 +64,7 @@ export const IngredientCalculatorTable: FC<{
       footer: '',
     },
   ];
+
   const table = useReactTable({
     columns,
     data,
@@ -65,12 +73,14 @@ export const IngredientCalculatorTable: FC<{
   return (
     <div className="p-2">
       <h2>Size : {data.length}</h2>
-      <table>
+      <table className="w-full">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</th>
+                <th key={header.id} className="text-left">
+                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                </th>
               ))}
             </tr>
           ))}
@@ -94,7 +104,6 @@ export const IngredientCalculatorTable: FC<{
           ))}
         </tfoot>
       </table>
-      <div className="h-4" />
     </div>
   );
 };

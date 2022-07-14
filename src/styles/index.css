@@ -5,3 +5,7 @@
 body {
     @apply dark:bg-slate-600 dark:text-slate-50;
 }
+
+input[type=number]:focus + .next-to-input-focus {
+    @apply mr-5;
+}

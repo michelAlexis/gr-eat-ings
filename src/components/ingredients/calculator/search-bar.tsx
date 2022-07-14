@@ -1,10 +1,11 @@
 import { IngredientSearchResult, Quantity } from '@/models/ingredient.model';
+import { useDebounce } from '@/utils/hooks/userDebounce';
 import { getDefaultQuantity } from '@/utils/ingredient.utils';
 import { trpc } from '@/utils/trpc';
-import { useDebounce } from '@/utils/hooks/userDebounce';
 import { Combobox } from '@headlessui/react';
 import { CheckIcon, PlusIcon } from '@heroicons/react/solid';
 import { FC, Fragment, useEffect, useState } from 'react';
+import QuantityInput, { QuantityOrEmpty } from '../Quantity.input';
 
 export type IngredientOption = IngredientSearchResult | { name: string; id: null; kcal: null };
 
@@ -16,7 +17,10 @@ interface Props {
 
 export const IngredientCalculatorSearchBar: FC<Props> = ({ onAdd }) => {
   const [selected, setSelected] = useState<IngredientSearchResult | null>(null);
-  const [quantity, setQuantity] = useState<Quantity>({ quantity: getDefaultQuantity('gr'), unit: 'gr' });
+  const [quantity, setQuantity] = useState<QuantityOrEmpty>({
+    quantity: getDefaultQuantity('gr'),
+    unit: 'gr',
+  });
 
   const [query, setQuery] = useState<string>('');
 
@@ -60,8 +64,8 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ onAdd }) => {
   };
 
   const validate = () => {
-    if (selected && quantity.quantity) {
-      onAdd({ id: selected.id, quantity });
+    if (selected && quantity.quantity !== undefined && quantity.quantity !== 0) {
+      onAdd({ id: selected.id, quantity: { unit: quantity.unit, quantity: quantity.quantity } });
       setSelected(null);
       setQuery('');
     }
@@ -101,7 +105,8 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ onAdd }) => {
           ))}
         </Combobox.Options>
       </Combobox>
-      <div className="relative group">
+      <QuantityInput value={quantity} onChange={(v) => setQuantity((q) => ({ ...q, quantity: v.length === 0 ? undefined : +v }))} />
+      {/* <div className="relative group">
         <input
           type="number"
           min={0}
@@ -110,7 +115,7 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ onAdd }) => {
           className="form-control block w-full px-2 py-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
         {quantity && <span className="absolute right-2 bottom-4 italic group-hover:mr-5 group-focus:mr-5">{quantity.unit}</span>}
-      </div>
+      </div> */}
       <button onClick={validate} className="">
         <PlusIcon height="1.25rem" width="1.25rem" className="hover:cursor-pointer hover:text-gray-200" />
       </button>

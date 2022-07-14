@@ -79,7 +79,7 @@ export const ingredientRouter = trpc
         },
       });
 
-      return results.map((r) => ({ id: r.id, name: r.name, unitRef: r.unitRef, kcal: r.nutritions?.[0].kcal }));
+      return results.map((r) => ({ id: r.id, name: r.name, unitRef: r.unitRef, kcal: r.nutritions?.[0]?.kcal }));
     },
   })
   // .mutation('create-ingredient', {

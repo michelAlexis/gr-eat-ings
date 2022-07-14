@@ -23,13 +23,27 @@ export const IndexPage: NextPage = () => {
     setList(litered);
   };
 
+  const onUpdate = (rowIndex: number, colId: string, value: any) => {
+    setList((old) =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...old[rowIndex],
+            [colId]: value,
+          };
+        }
+        return row;
+      })
+    );
+  };
+
   return (
     <Layout title="Calculator">
       <div className="flex flex-col items-center">
         <div className="min-w-[600px] mb-4">
           <h2 className="text-2xl">Calculator</h2>
           <SearchBar onAdd={onAdd}></SearchBar>
-          <Table data={list} onRemove={onRemove} />
+          <Table data={list} onRemove={onRemove} onUpdate={onUpdate} />
         </div>
       </div>
     </Layout>
