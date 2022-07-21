@@ -55,7 +55,7 @@ export const CreateIngredientForm: FC<IngredientFormProps> = () => {
         <button type="submit">Submit</button>
       </div>
 
-      <DevTool control={control} />
+      {/* <DevTool control={control} /> */}
     </form>
   );
 };

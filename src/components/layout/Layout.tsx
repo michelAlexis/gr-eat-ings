@@ -26,6 +26,11 @@ export const Layout = ({ children, title = 'This is the default title' }: Props)
         </Link>
 
         <span className="mx-4">|</span>
+        <Link href="/ingredients/create">
+          <a>Create ingredient</a>
+        </Link>
+
+        <span className="mx-4">|</span>
         <Link href="/ingredients/calculator">
           <a>Calculator</a>
         </Link>
