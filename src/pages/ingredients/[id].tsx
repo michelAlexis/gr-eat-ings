@@ -1,5 +1,5 @@
 import { prisma } from '@/backend/utils/prisma';
-import { Layout } from '@/components/Layout';
+import { Layout } from '@/components/layout';
 import { AsyncReturnType } from '@/utils/ts.utils';
 import { GetServerSideProps, NextPage } from 'next';
 

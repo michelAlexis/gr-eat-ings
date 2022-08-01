@@ -1,5 +1,5 @@
 import IngredientList from '@/components/ingredients/Ingredient.list';
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/layout';
 import { NextPage } from 'next';
 
 export const IndexPage: NextPage = () => {

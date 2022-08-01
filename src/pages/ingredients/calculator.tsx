@@ -1,6 +1,6 @@
 import SearchBar, { OnAddParams } from '@/components/ingredients/calculator/search-bar';
 import Table from '@/components/ingredients/calculator/table';
-import Layout from '@/components/Layout';
+import { Layout } from '@/components/layout';
 import { IngredientDetail, Quantity } from '@/models/ingredient.model';
 import { getDefaultQuantity, computeMultiplier } from '@/utils/ingredient.utils';
 import { client } from '@/utils/trpc';

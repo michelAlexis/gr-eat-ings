@@ -1,6 +1,9 @@
+import { IngredientUnit } from '@prisma/client';
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '../utils/prisma';
+
+
 
 export const ingredientRouter = trpc
   .router()
@@ -82,30 +85,34 @@ export const ingredientRouter = trpc
       return results.map((r) => ({ id: r.id, name: r.name, unitRef: r.unitRef, kcal: r.nutritions?.[0]?.kcal }));
     },
   })
-  // .mutation('create-ingredient', {
-  //   input: z.object({
-  //     name: z.string()?.min(1).max(100),
-  //     nutritions: z
-  //       .array(
-  //         z.object({
-  //           kcal: z.number().min(0),
-  //         })
-  //       )
-  //       .min(1),
-  //   }),
-  //   resolve: async ({ input }) => {
-  //     return await prisma.ingredient.create({
-  //       data: {
-  //         name: input.name,
-  //         nutritions: {
-  //           createMany: {
-  //             data: input.nutritions,
-  //           },
-  //         },
-  //       },
-  //     });
-  //   },
-  // })
+  .mutation('create', {
+    input: z.object({
+      name: z.string()?.min(1).max(100),
+      unitRef: z.nativeEnum(IngredientUnit),
+      nutritions: z
+        .array(
+          z.object({
+            kcal: z.number().min(0),
+            denomination: z.string(),
+          })
+        )
+        .min(1),
+    }),
+    resolve: async ({ input }) => {
+      input.nutritions[0].denomination = 'ref';
+      return await prisma.ingredient.create({
+        data: {
+          name: input.name,
+          unitRef: input.unitRef,
+          nutritions: {
+            createMany: {
+              data: input.nutritions,
+            },
+          },
+        },
+      });
+    },
+  })
   .mutation('delete', {
     input: z.object({
       id: z.string(),

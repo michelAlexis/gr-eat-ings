@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "1.6.5",
     "@heroicons/react": "1.0.6",
+    "@hookform/resolvers": "^2.9.5",
     "@prisma/client": "3.15.2",
     "@tanstack/react-table": "8.2.2",
     "@trpc/client": "9.25.3",
