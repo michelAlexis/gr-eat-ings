@@ -1,9 +1,10 @@
 import { Layout } from '@/components/layout';
+import { getDefaultQuantity } from '@/utils/ingredient.utils';
 import { InferMutationInput, trpc } from '@/utils/trpc';
 import { Listbox } from '@headlessui/react';
 import { IngredientUnit } from '@prisma/client';
-import { FC } from 'react';
-import { Control, FieldErrors, useController, useForm } from 'react-hook-form';
+import { FC, useMemo } from 'react';
+import { Control, FieldErrors, useController, useForm, useWatch } from 'react-hook-form';
 
 type CreateAction = InferMutationInput<'ingredients.create'>;
 
@@ -18,11 +19,7 @@ export const IngredientDetailPage = () => {
     formState: { errors },
   } = useForm<CreateAction>({
     defaultValues: {
-      nutritions: [
-        {
-          denomination: 'ref',
-        },
-      ],
+      unitRef: 'gr',
     },
   });
 
@@ -30,6 +27,9 @@ export const IngredientDetailPage = () => {
 
   const onSubmit = async (data: CreateAction) => {
     console.log('submit', data);
+
+    await mutation.mutateAsync(data);
+    reset();
   };
 
   const onInvalid = (error: FieldErrors<CreateAction>) => console.warn('invalid', error.name);
@@ -37,15 +37,20 @@ export const IngredientDetailPage = () => {
     <Layout title="Ingredients">
       <div className="flex flex-col items-center">
         <div className="min-w-[600px]">
-          <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="mb-4 flex flex-col">
+          <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="mb-4 flex flex-col gap-2">
             {/* Name */}
             <InputNameTitle {...{ control, errors }} />
 
             {/* Unit ref */}
             <UnitRefDropdown {...{ control, errors }} />
 
-            <div className="mt-3 bt-2">
-              <button type="submit">Submit</button>
+            {/* Nutrition */}
+            <NutritionForm {...{ control, errors }} />
+
+            <div className="mt-3 bt-2 flex justify-end">
+              <button type="submit" className="hover:bg-slate-400 py-2 px-3 rounded-sm">
+                Submit
+              </button>
             </div>
           </form>
         </div>
@@ -56,7 +61,7 @@ export const IngredientDetailPage = () => {
 
 export default IngredientDetailPage;
 
-const InputNameTitle: FC<{ control: Control<CreateAction>; errors: FieldErrors<CreateAction> }> = ({ errors, control }) => {
+const InputNameTitle: FC<{ control: Control<CreateAction>; errors: FieldErrors<CreateAction> }> = ({ control, errors }) => {
   return (
     <>
       <input
@@ -80,11 +85,14 @@ const InputNameTitle: FC<{ control: Control<CreateAction>; errors: FieldErrors<C
   );
 };
 
-const unitRefOptions = Object.keys(IngredientUnit);
+const unitRefOptions: IngredientUnit[] = ['gr', 'ml', 'unique'];
 
-const UnitRefDropdown: FC<{ control: Control<CreateAction>; errors: FieldErrors<CreateAction> }> = ({ errors, control }) => {
+const UnitRefDropdown: FC<{ control: Control<CreateAction>; errors: FieldErrors<CreateAction> }> = ({ control, errors }) => {
+  const unitRef = useWatch({ control: control, name: 'unitRef' });
+  const defaultQuantity = useMemo(() => getDefaultQuantity(unitRef), [unitRef]);
+
   const {
-    field: { value, onChange },
+    field: { value, onChange, onBlur },
   } = useController({
     name: 'unitRef',
     control,
@@ -98,20 +106,38 @@ const UnitRefDropdown: FC<{ control: Control<CreateAction>; errors: FieldErrors<
 
   return (
     <>
-      <label>Unit</label>
-
-      <Listbox value={value} onChange={onChange} as="div" className="relative">
-        <Listbox.Button>{value ?? 'Select'}</Listbox.Button>
-        <Listbox.Options as="ul" className="absolute">
-          {unitRefOptions.map((unit, i) => (
-            <Listbox.Option key={i} value={unit} as="li">
-              {unit}
-            </Listbox.Option>
-          ))}
-        </Listbox.Options>
-      </Listbox>
+      <div className="flex text-2xl bg-transparent w-full justify-between p-2 text-gray-500 border-[1px] border-gray-500">
+        {defaultQuantity}
+        <Listbox value={value} onChange={onChange} onBlur={onBlur} as="div" className="relative w-40">
+          <Listbox.Button className="w-full text-left">{value ?? 'Select'}</Listbox.Button>
+          <Listbox.Options as="ul" className="absolute bg-slate-400 w-full">
+            {unitRefOptions.map((unit, i) => (
+              <Listbox.Option key={i} value={unit} as="li" className="cursor-pointer hover:bg-slate-300 w-full p-2">
+                {unit}
+              </Listbox.Option>
+            ))}
+          </Listbox.Options>
+        </Listbox>
+      </div>
 
       <DefaultErrorMessage errors={errors.unitRef} />
+    </>
+  );
+};
+
+const NutritionForm: FC<{ control: Control<CreateAction>; errors: FieldErrors<CreateAction> }> = ({ control, errors }) => {
+  return (
+    <>
+      <input
+        type="number"
+        min={0}
+        {...control.register('nutritionRef.kcal', {
+          valueAsNumber: true,
+        })}
+        placeholder="Kcal"
+        className="text-2xl bg-transparent w-full"
+      />
+      <DefaultErrorMessage errors={errors.nutritionRef?.kcal} />
     </>
   );
 };

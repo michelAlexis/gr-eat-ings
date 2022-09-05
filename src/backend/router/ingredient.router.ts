@@ -1,9 +1,8 @@
+import { getDefaultQuantity } from '@/utils/ingredient.utils';
 import { IngredientUnit } from '@prisma/client';
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 import { prisma } from '../utils/prisma';
-
-
 
 export const ingredientRouter = trpc
   .router()
@@ -34,10 +33,10 @@ export const ingredientRouter = trpc
           id: true,
           name: true,
           unitRef: true,
-          nutritions: {
+          quantityRef: true,
+          nutritionRef: {
             select: {
               id: true,
-              denomination: true,
               kcal: true,
             },
           },
@@ -69,11 +68,8 @@ export const ingredientRouter = trpc
           id: true,
           name: true,
           unitRef: true,
-          nutritions: {
-            take: 1,
-            where: {
-              denomination: 'ref',
-            },
+          quantityRef: true,
+          nutritionRef: {
             select: {
               id: true,
               kcal: true,
@@ -82,32 +78,25 @@ export const ingredientRouter = trpc
         },
       });
 
-      return results.map((r) => ({ id: r.id, name: r.name, unitRef: r.unitRef, kcal: r.nutritions?.[0]?.kcal }));
+      return results.map((r) => ({ id: r.id, name: r.name, unitRef: r.unitRef, kcal: r.nutritionRef?.kcal }));
     },
   })
   .mutation('create', {
     input: z.object({
       name: z.string()?.min(1).max(100),
       unitRef: z.nativeEnum(IngredientUnit),
-      nutritions: z
-        .array(
-          z.object({
-            kcal: z.number().min(0),
-            denomination: z.string(),
-          })
-        )
-        .min(1),
+      nutritionRef: z.object({
+        kcal: z.number().int().min(0).nullable(),
+      }),
     }),
     resolve: async ({ input }) => {
-      input.nutritions[0].denomination = 'ref';
       return await prisma.ingredient.create({
         data: {
           name: input.name,
           unitRef: input.unitRef,
-          nutritions: {
-            createMany: {
-              data: input.nutritions,
-            },
+          quantityRef: getDefaultQuantity(input.unitRef),
+          nutritionRef: {
+            create: input.nutritionRef,
           },
         },
       });

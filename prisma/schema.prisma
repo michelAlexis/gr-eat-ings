@@ -21,39 +21,44 @@ enum IngredientUnit {
 model Ingredient {
   id String @id @default(cuid())
 
-  name String @db.VarChar(100)
-  unitRef IngredientUnit
-
-  nutritions Nutrition[]
+  name           String         @db.VarChar(100)
+  unitRef        IngredientUnit
+  quantityRef    Int
+  nutritionRefId String         @unique
+  nutritionRef   Nutrition      @relation(fields: [nutritionRefId], references: [id])
 
   // audit
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   IngredientQuantity IngredientQuantity[]
+
   @@fulltext([name])
 }
 
 model Nutrition {
   id String @id @default(cuid())
 
-  ingredientId String
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredient Ingredient?
 
-  denomination String @db.VarChar(100)
-  kcal         Int?
+  kcal Int?
+  // TODO Add fat, carb, prot, ...
 
   // audit
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-enum Unit {
-  unique
-  gr
-  kg
-  ml
-  l
+model Recipe {
+  id String @id @default(cuid())
+
+  name          String @db.VarChar(100)
+  sizeReference Int
+
+  // audit
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  IngredientQuantity IngredientQuantity[]
 }
 
 model IngredientQuantity {
@@ -75,14 +80,10 @@ model IngredientQuantity {
   @@unique([recipeId, ingredientId])
 }
 
-model Recipe {
-  id String @id @default(cuid())
-
-  name          String @db.VarChar(100)
-  sizeReference Int
-
-  // audit
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
-  IngredientQuantity IngredientQuantity[]
+enum Unit {
+  unique
+  gr
+  kg
+  ml
+  l
 }
