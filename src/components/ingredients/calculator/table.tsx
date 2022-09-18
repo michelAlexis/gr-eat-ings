@@ -40,12 +40,11 @@ export const IngredientCalculatorTable: FC<{
       accessorFn: (i) => i.quantity,
       cell: ({ cell, row, column }) => {
         const quantity = cell.getValue<Quantity>();
-        const onChange = (input: string) => {
-          if (input.length > 1) {
-            onUpdate(row.index, column.id, { ...quantity, quantity: +input });
-          }
+        const onChange = (input: number) => {
+          console.log('New quantity', input);
+          // onUpdate(row.index, column.id, { ...quantity, quantity: input ?? 0 });
         };
-        return <QuantityInput defaultValue={quantity} onChange={onChange} />;
+        return <QuantityInput defaultValue={quantity} onChange={onChange} className="max-w-md" />;
       },
       id: 'quantity',
       header: 'Quantity',
@@ -58,7 +57,11 @@ export const IngredientCalculatorTable: FC<{
     },
     {
       accessorFn: (i) => i.ingredient.id,
-      cell: (i) => <button onClick={() => onRemove(i.getValue())}>-</button>,
+      cell: (i) => (
+        <button onClick={() => onRemove(i.getValue())} className="p-3 bg-slate-800 text-white rounded-md hover:bg-slate-700">
+          -
+        </button>
+      ),
       id: 'remove-action',
       header: '',
       footer: '',
@@ -98,7 +101,9 @@ export const IngredientCalculatorTable: FC<{
           {table.getFooterGroups().map((footerGroup) => (
             <tr key={footerGroup.id}>
               {footerGroup.headers.map((header) => (
-                <th key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}</th>
+                <td key={header.id} className="font-bold">
+                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
+                </td>
               ))}
             </tr>
           ))}

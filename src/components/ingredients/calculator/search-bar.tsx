@@ -1,21 +1,21 @@
 import { IngredientSearchResult, Quantity } from '@/models/ingredient.model';
 import { useDebounce } from '@/utils/hooks/userDebounce';
 import { getDefaultQuantity } from '@/utils/ingredient.utils';
+import { classNames } from '@/utils/style.utils';
 import { trpc } from '@/utils/trpc';
 import { Combobox } from '@headlessui/react';
 import { CheckIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { FC, Fragment, useEffect, useState } from 'react';
 import QuantityInput, { QuantityOrEmpty } from '../Quantity.input';
 
-export type IngredientOption = IngredientSearchResult | { name: string; id: null; kcal: null };
-
 export type OnAddParams = { id: string; quantity: Quantity };
 
 interface Props {
+  exclude: string[];
   onAdd: (_: OnAddParams) => void;
 }
 
-export const IngredientCalculatorSearchBar: FC<Props> = ({ onAdd }) => {
+export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => {
   const [selected, setSelected] = useState<IngredientSearchResult | null>(null);
   const [quantity, setQuantity] = useState<QuantityOrEmpty>({
     quantity: getDefaultQuantity('gr'),
@@ -24,34 +24,21 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ onAdd }) => {
 
   const [query, setQuery] = useState<string>('');
 
-  const [results, setResults] = useState<IngredientOption[]>([]);
-
   // Debound the query to prevent too fast fetching
   const debouncedQuery = useDebounce(query, 300);
 
-  const { refetch, isLoading } = trpc.useQuery(['ingredients.search', { query: debouncedQuery }], {
+  const { data, refetch, isLoading, remove } = trpc.useQuery(['ingredients.search', { query: debouncedQuery, exclude }], {
     keepPreviousData: true,
     enabled: false,
-    onSuccess: (r) => {
-      // Add the 'No result' option
-      if (r.length == 0) {
-        setResults([
-          {
-            id: null,
-            name: 'No result found',
-            kcal: null,
-          },
-        ]);
-      } else {
-        setResults(r);
-      }
-    },
   });
+
+  const results = data ?? [];
+
+  const minQueryLenght = 3;
 
   // Filter the query to prevent overfetching
   useEffect(() => {
-    setResults([]);
-    if (debouncedQuery?.length > 2) {
+    if (debouncedQuery.length >= minQueryLenght) {
       refetch();
     }
   }, [debouncedQuery, refetch]);
@@ -72,37 +59,26 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ onAdd }) => {
   };
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between gap-1">
       <Combobox as="div" value={selected} onChange={onIngredientSelect} className="relative grow">
         <Combobox.Input
           onChange={(event) => setQuery(event.target.value)}
-          displayValue={(ingredient: IngredientOption) => ingredient?.name}
+          displayValue={(ingredient: IngredientSearchResult) => ingredient?.name}
           placeholder="Search Ingredients..."
           required
           autoComplete="off"
           className="block px-2 py-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         />
-        {!isLoading && query?.length > 0 && query?.length < 3 && (
-          <span className="absolute right-2 bottom-4 italic">Minimum 3 characteres</span>
+        {!isLoading && query?.length > 0 && query?.length < minQueryLenght && (
+          <span className="absolute right-2 bottom-4 italic">Minimum {minQueryLenght} characteres</span>
         )}
         {isLoading && <span className="absolute right-2 bottom-4 italic">Loading</span>}
         <Combobox.Options as="ul" className="absolute w-full text-sm rounded-md text-gray-700 dark:text-gray-200">
-          {results.map((ingredient, i) => (
-            <Combobox.Option key={i} value={ingredient} disabled={!ingredient.id} as={Fragment}>
-              {({ active, selected, disabled }) => (
-                <li
-                  className={`
-                ${disabled ? 'bg-gray-500 text-black' : active ? 'bg-blue-500 text-white' : 'bg-white text-black'}
-                ${i === 0 && 'rounded-t-md mt-1'}
-                ${i === results.length - 1 && 'rounded-b-md'}
-                flex justify-between px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white`}>
-                  <span>{ingredient.name}</span>
-                  {ingredient.kcal && <span className="text-gray-100">{ingredient.kcal} kcal</span>}
-                  {selected && <CheckIcon className="ml-3" />}
-                </li>
-              )}
-            </Combobox.Option>
-          ))}
+          {results.length === 0 && !isLoading && query.length >= minQueryLenght && <NoResultOption />}
+          {results.length > 0 &&
+            results.map((ingredient, i) => (
+              <IngredientOption key={i} ingredient={ingredient} first={i === 0} last={i === results.length - 1} />
+            ))}
         </Combobox.Options>
       </Combobox>
       <QuantityInput value={quantity} onChange={(v) => setQuantity((q) => ({ ...q, quantity: v.length === 0 ? undefined : +v }))} />
@@ -116,10 +92,52 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ onAdd }) => {
         />
         {quantity && <span className="absolute right-2 bottom-4 italic group-hover:mr-5 group-focus:mr-5">{quantity.unit}</span>}
       </div> */}
-      <button onClick={validate} className="">
-        <PlusIcon height="1.25rem" width="1.25rem" className="hover:cursor-pointer hover:text-gray-200" />
+      <button onClick={validate} className="p-3 bg-violet-700 text-white rounded-md hover:cursor-pointer hover:text-gray-200">
+        <PlusIcon height="1.25rem" width="1.25rem" />
       </button>
     </div>
+  );
+};
+
+const NoResultOption: FC = () => {
+  return (
+    <Combobox.Option value={null} disabled={true} as={Fragment}>
+      {() => (
+        <li
+          className={classNames(
+            'bg-gray-500 text-black',
+            'rounded-t-md mt-1',
+            'rounded-b-md',
+            'flex justify-between px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
+          )}>
+          <span>No ingredient found..</span>
+        </li>
+      )}
+    </Combobox.Option>
+  );
+};
+
+const IngredientOption: FC<{ ingredient: IngredientSearchResult; first: boolean; last: boolean }> = ({ ingredient, first, last }) => {
+  return (
+    <Combobox.Option value={ingredient} as={Fragment}>
+      {({ active, selected }) => (
+        <li
+          className={classNames(
+            active ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black',
+            first && 'rounded-t-md mt-1',
+            last && 'rounded-b-md',
+            'flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
+          )}>
+          <span className="flex-1">{ingredient.name}</span>
+          {ingredient.kcalRef && (
+            <span>
+              {ingredient.kcalRef} kcal / {ingredient.quantityRef} {ingredient.unitRef}
+            </span>
+          )}
+          {selected && <CheckIcon className="h-5 w-5 ml-3" />}
+        </li>
+      )}
+    </Combobox.Option>
   );
 };
 

@@ -12,6 +12,11 @@ const getIngredientDetail = async (id: string) => {
     select: {
       id: true,
       name: true,
+      nutritionRef: {
+        select: {
+          kcal: true,
+        },
+      },
     },
   });
 
@@ -34,7 +39,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
 export const IngredientDetailPage: NextPage<{ ingredient: IngredientDetail }> = ({ ingredient }) => {
   if (!ingredient) {
-    console.warn('No ingredient');
     return (
       <Layout title="Ingredients">
         <div className="flex flex-col items-center">
@@ -46,10 +50,13 @@ export const IngredientDetailPage: NextPage<{ ingredient: IngredientDetail }> = 
     );
   }
   return (
-    <Layout title="Ingredients">
-      <div className="flex flex-col items-center">
+    <Layout title={ingredient.name}>
+      <div className="flex flex-col">
         <div className="min-w-[600px]">
           <h2 className="text-2xl">{ingredient.name}</h2>
+        </div>
+        <div>
+          <span className="font-bold">Kcal</span> : {ingredient.nutritionRef.kcal}
         </div>
       </div>
     </Layout>

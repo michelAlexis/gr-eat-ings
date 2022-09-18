@@ -23,14 +23,22 @@ export const Layout: FCC<{ title: string }> = ({ children, title }) => (
   </>
 );
 
+// const user = {
+//   name: 'Tom Cook',
+//   email: 'tom@example.com',
+//   imageUrl:
+//     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+// };
+
 const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
+  name: 'Alexis Michel',
+  email: 'ami@greatings.com',
   imageUrl:
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 };
+
 const navigation = [
-  { name: 'Dashboard', href: '/' },
+  { name: 'Home', href: '/' },
   { name: 'Create ingredient', href: '/ingredients/create' },
   { name: 'Calculator', href: '/ingredients/calculator' },
   { name: 'About', href: '/about' },
@@ -199,11 +207,7 @@ const Footer = () => {
 const Main: FCC = ({ children }) => {
   return (
     <main>
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        {/* Replace with your content */}
-        <div className="px-4 py-6 sm:px-0">{children}</div>
-        {/* /End replace */}
-      </div>
+      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{children}</div>
     </main>
   );
 };

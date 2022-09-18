@@ -47,6 +47,7 @@ export const ingredientRouter = trpc
   .query('search', {
     input: z.object({
       query: z.string(),
+      exclude: z.array(z.string()).nullish(),
     }),
     resolve: async ({ input }) => {
       console.log('Query to search ingredients:', input);
@@ -56,9 +57,8 @@ export const ingredientRouter = trpc
 
       const results = await prisma.ingredient.findMany({
         where: {
-          name: {
-            contains: input.query,
-          },
+          name: { contains: input.query },
+          id: input.exclude && input.exclude?.length > 0 ? { notIn: input.exclude } : undefined,
         },
         take: 50,
         orderBy: {
@@ -78,7 +78,13 @@ export const ingredientRouter = trpc
         },
       });
 
-      return results.map((r) => ({ id: r.id, name: r.name, unitRef: r.unitRef, kcal: r.nutritionRef?.kcal }));
+      return results.map((r) => ({
+        id: r.id,
+        name: r.name,
+        unitRef: r.unitRef,
+        quantityRef: r.quantityRef,
+        kcalRef: r.nutritionRef?.kcal,
+      }));
     },
   })
   .mutation('create', {

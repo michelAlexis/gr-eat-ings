@@ -2,7 +2,7 @@ import SearchBar, { OnAddParams } from '@/components/ingredients/calculator/sear
 import Table from '@/components/ingredients/calculator/table';
 import { Layout } from '@/components/layout';
 import { IngredientDetail, Quantity } from '@/models/ingredient.model';
-import { getDefaultQuantity, computeMultiplier } from '@/utils/ingredient.utils';
+import { computeMultiplier, getDefaultQuantity } from '@/utils/ingredient.utils';
 import { client } from '@/utils/trpc';
 import { NextPage } from 'next';
 import { useState } from 'react';
@@ -39,12 +39,9 @@ export const IndexPage: NextPage = () => {
 
   return (
     <Layout title="Calculator">
-      <div className="flex flex-col items-center">
-        <div className="min-w-[600px] mb-4">
-          <h2 className="text-2xl">Calculator</h2>
-          <SearchBar onAdd={onAdd}></SearchBar>
-          <Table data={list} onRemove={onRemove} onUpdate={onUpdate} />
-        </div>
+      <div className="">
+        <SearchBar onAdd={onAdd} exclude={list.map((i) => i.ingredient.id)}></SearchBar>
+        <Table data={list} onRemove={onRemove} onUpdate={onUpdate} />
       </div>
     </Layout>
   );
