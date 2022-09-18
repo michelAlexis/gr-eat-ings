@@ -5,11 +5,11 @@ import QuantityInput from '../Quantity.input';
 
 function reduceNutrition(
   ingredients: { ingredient: IngredientDetail; multiplier: number; quantity: Quantity }[],
-  key: keyof IngredientDetail['nutritions'][number]
+  key: keyof IngredientDetail['nutritionRef']
 ) {
   let anyMissing = false;
   const sum = ingredients.reduce((agg, i) => {
-    const refValue = i.ingredient.nutritions?.[0]?.[key];
+    const refValue = i.ingredient.nutritionRef[key];
 
     if (refValue) {
       const value = (+refValue ?? 0) * i.multiplier;
@@ -52,7 +52,7 @@ export const IngredientCalculatorTable: FC<{
       footer: '',
     },
     {
-      accessorFn: (i) => (i.ingredient.nutritions[0]?.kcal ?? 0) * i.multiplier,
+      accessorFn: (i) => (i.ingredient.nutritionRef.kcal ?? 0) * i.multiplier,
       header: 'Kcal',
       footer: () => reduceNutrition(data, 'kcal'),
     },

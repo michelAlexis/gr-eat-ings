@@ -12,13 +12,6 @@ const getIngredientDetail = async (id: string) => {
     select: {
       id: true,
       name: true,
-      nutritions: {
-        select: {
-          id: true,
-          denomination: true,
-          kcal: true,
-        },
-      },
     },
   });
 

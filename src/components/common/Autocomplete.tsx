@@ -1,6 +1,6 @@
 import { useDebounceState } from '@/utils/hooks/userDebounceState';
 import { Combobox } from '@headlessui/react';
-import { CheckIcon } from '@heroicons/react/solid';
+import { CheckIcon } from '@heroicons/react/20/solid';
 import { Fragment, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 

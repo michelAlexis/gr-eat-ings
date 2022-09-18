@@ -1,8 +1,8 @@
-import type { inferQueryResponse } from '@/pages/api/trpc/[trpc]';
+import { InferQueryOutput } from '@/utils/trpc';
 import type { Ingredient, IngredientUnit, Nutrition } from '@prisma/client';
 
-export type IngredientSearchResult = inferQueryResponse<'ingredients.search'>[number];
-export type IngredientDetail = inferQueryResponse<'ingredients.by-id'>;
+export type IngredientSearchResult = InferQueryOutput<'ingredients.search'>[number];
+export type IngredientDetail = InferQueryOutput<'ingredients.by-id'>;
 
 export interface Recipe {
   name: string;

@@ -3,7 +3,7 @@ import { useDebounce } from '@/utils/hooks/userDebounce';
 import { getDefaultQuantity } from '@/utils/ingredient.utils';
 import { trpc } from '@/utils/trpc';
 import { Combobox } from '@headlessui/react';
-import { CheckIcon, PlusIcon } from '@heroicons/react/solid';
+import { CheckIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { FC, Fragment, useEffect, useState } from 'react';
 import QuantityInput, { QuantityOrEmpty } from '../Quantity.input';
 
@@ -98,7 +98,7 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ onAdd }) => {
                 flex justify-between px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white`}>
                   <span>{ingredient.name}</span>
                   {ingredient.kcal && <span className="text-gray-100">{ingredient.kcal} kcal</span>}
-                  {selected && <CheckIcon height="24px" width="24px" className="ml-3" />}
+                  {selected && <CheckIcon className="ml-3" />}
                 </li>
               )}
             </Combobox.Option>

@@ -1,11 +1,10 @@
-import { inferQueryResponse } from '@/pages/api/trpc/[trpc]';
-import { trpc } from '@/utils/trpc';
 import { useDebounce } from '@/utils/hooks/userDebounce';
+import { InferQueryOutput, trpc } from '@/utils/trpc';
 import { Combobox } from '@headlessui/react';
-import { CheckIcon } from '@heroicons/react/solid';
+import { CheckIcon } from '@heroicons/react/24/solid';
 import { FC, Fragment, useEffect, useState } from 'react';
 
-type IngredientSearchResult = inferQueryResponse<'ingredients.search'>[number];
+type IngredientSearchResult = InferQueryOutput<'ingredients.search'>[number];
 type IngredientOption = IngredientSearchResult | { name: string; id: null };
 
 interface Props {
@@ -78,7 +77,7 @@ export const IngredientAutocomplete: FC<Props> = ({ onChange }) => {
                 ${i === results.length - 1 && 'rounded-b-md'}
                 flex justify-between px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white`}>
                 <span>{ingredient.name}</span>
-                {selected && <CheckIcon height="24px" width="24px" className="ml-3" />}
+                {selected && <CheckIcon className="ml-3" />}
               </li>
             )}
           </Combobox.Option>

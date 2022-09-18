@@ -1,5 +1,5 @@
 import { trpc } from '@/utils/trpc';
-import { ExternalLinkIcon } from '@heroicons/react/solid';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { FC } from 'react';
 
@@ -18,16 +18,13 @@ export const IngredientDetail: FC<Props> = ({ id }) => {
         <h3>{data.name}</h3>
         <Link href={`ingredients/${id}`}>
           <a>
-            <ExternalLinkIcon height={34} width={34} className="cursor-pointer hover:text-gray-300" />
+            <ArrowTopRightOnSquareIcon height={34} width={34} className="cursor-pointer hover:text-gray-300" />
           </a>
         </Link>
-      </div>
-      {data?.nutritions.map((nutrition, i) => (
-        <div key={i}>
-          <span>{nutrition.denomination}</span>
-          <span>kcal: {nutrition.kcal}</span>
+        <div>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>
-      ))}
+      </div>
     </>
   );
 };
