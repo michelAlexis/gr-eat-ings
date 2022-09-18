@@ -11,11 +11,8 @@ type CreateAction = InferMutationInput<'ingredients.create'>;
 export const IngredientDetailPage = () => {
   const {
     control,
-    register,
     handleSubmit,
     reset,
-    getValues,
-    setValue,
     formState: { errors },
   } = useForm<CreateAction>({
     defaultValues: {
@@ -48,7 +45,7 @@ export const IngredientDetailPage = () => {
             <NutritionForm {...{ control, errors }} />
 
             <div className="mt-3 bt-2 flex justify-end">
-              <button type="submit" className="hover:bg-slate-400 py-2 px-3 rounded-sm">
+              <button type="submit" className="bg-slate-500 hover:bg-slate-400 py-2 px-3 rounded-sm">
                 Submit
               </button>
             </div>

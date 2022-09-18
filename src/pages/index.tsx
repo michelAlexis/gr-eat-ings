@@ -1,7 +1,6 @@
 import { AutoComplete } from '@/components/common/Autocomplete';
 import { Layout } from '@/components/layout';
 import { useState } from 'react';
-import CreateIngredientForm from '../components/ingredients/Ingredient.form';
 
 const IndexPage = () => {
   const search = async (query: string) => {
@@ -24,7 +23,6 @@ const IndexPage = () => {
       <div className="flex flex-col items-center">
         <div className="mb-3 min-w-[600px]">
           <h2 className="text-2xl">Formulaire</h2>
-          <CreateIngredientForm></CreateIngredientForm>
           <AutoComplete
             onQuery={search}
             getLabel={(s) => s?.label ?? ''}
