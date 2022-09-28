@@ -1,4 +1,5 @@
 import { IngredientSearchResult, Quantity } from '@/models/ingredient.model';
+import { useFocus } from '@/utils/hooks/useFocus';
 import { useDebounce } from '@/utils/hooks/userDebounce';
 import { getDefaultQuantity } from '@/utils/ingredient.utils';
 import { classNames } from '@/utils/style.utils';
@@ -23,11 +24,12 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
   });
 
   const [query, setQuery] = useState<string>('');
+  const [inputRef, setInputFocus] = useFocus();
 
   // Debound the query to prevent too fast fetching
   const debouncedQuery = useDebounce(query, 300);
 
-  const { data, refetch, isLoading, remove } = trpc.useQuery(['ingredients.search', { query: debouncedQuery, exclude }], {
+  const { data, refetch, isLoading } = trpc.useQuery(['ingredients.search', { query: debouncedQuery, exclude }], {
     keepPreviousData: true,
     enabled: false,
   });
@@ -55,6 +57,7 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
       onAdd({ id: selected.id, quantity: { unit: quantity.unit, quantity: quantity.quantity } });
       setSelected(null);
       setQuery('');
+      setInputFocus();
     }
   };
 
@@ -62,6 +65,7 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
     <div className="flex justify-between gap-1">
       <Combobox as="div" value={selected} onChange={onIngredientSelect} className="relative grow">
         <Combobox.Input
+          ref={inputRef}
           onChange={(event) => setQuery(event.target.value)}
           displayValue={(ingredient: IngredientSearchResult) => ingredient?.name}
           placeholder="Search Ingredients..."
@@ -81,7 +85,7 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
             ))}
         </Combobox.Options>
       </Combobox>
-      <QuantityInput value={quantity} onChange={(v) => setQuantity((q) => ({ ...q, quantity: v.length === 0 ? undefined : +v }))} />
+      <QuantityInput value={quantity} onChange={(v) => setQuantity((q) => ({ ...q, quantity: v }))} />
       {/* <div className="relative group">
         <input
           type="number"

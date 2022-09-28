@@ -39,10 +39,12 @@ export const IndexPage: NextPage = () => {
 
   return (
     <Layout title="Calculator">
-      <div className="">
-        <SearchBar onAdd={onAdd} exclude={list.map((i) => i.ingredient.id)}></SearchBar>
+      <>
+        <div className="w-4/5 m-auto">
+          <SearchBar onAdd={onAdd} exclude={list.map((i) => i.ingredient.id)}></SearchBar>
+        </div>
         <Table data={list} onRemove={onRemove} onUpdate={onUpdate} />
-      </div>
+      </>
     </Layout>
   );
 };
