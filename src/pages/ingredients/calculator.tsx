@@ -1,5 +1,5 @@
 import SearchBar, { OnAddParams } from '@/components/ingredients/calculator/search-bar';
-import Table from '@/components/ingredients/calculator/table';
+import { NewIngredientCalculatorTable } from '@/components/ingredients/calculator/table';
 import { Layout } from '@/components/layout';
 import { IngredientDetail, Quantity } from '@/models/ingredient.model';
 import { computeMultiplier, getDefaultQuantity } from '@/utils/ingredient.utils';
@@ -23,13 +23,13 @@ export const IndexPage: NextPage = () => {
     setList(litered);
   };
 
-  const onUpdate = (rowIndex: number, colId: string, value: any) => {
+  const onUpdate = (rowIndex: number, quantity: number) => {
     setList((old) =>
       old.map((row, index) => {
         if (index === rowIndex) {
           return {
-            ...old[rowIndex],
-            [colId]: value,
+            ...row,
+            quantity: { ...row.quantity, quantity },
           };
         }
         return row;
@@ -40,10 +40,10 @@ export const IndexPage: NextPage = () => {
   return (
     <Layout title="Calculator">
       <>
-        <div className="w-4/5 m-auto">
+        <div className="w-4/5 m-auto mb-5">
           <SearchBar onAdd={onAdd} exclude={list.map((i) => i.ingredient.id)}></SearchBar>
         </div>
-        <Table data={list} onRemove={onRemove} onUpdate={onUpdate} />
+        <NewIngredientCalculatorTable data={list} onRemove={onRemove} onQuantityUpdate={onUpdate} />
       </>
     </Layout>
   );

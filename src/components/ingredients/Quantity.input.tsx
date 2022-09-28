@@ -1,25 +1,26 @@
 import { classNames } from '@/utils/style.utils';
 import { IngredientUnit } from '@prisma/client';
-import { FC } from 'react';
+import { forwardRef } from 'react';
 
 export type QuantityOrEmpty<U extends IngredientUnit = IngredientUnit> = { quantity: number | undefined; unit: U };
 
 interface Props {
   value?: QuantityOrEmpty;
   defaultValue?: QuantityOrEmpty;
-  onChange: (v: number) => void;
+  onChange: (v: number | undefined) => void;
   className?: string;
 }
 
-export const QuantityInput: FC<Props> = ({ value, defaultValue, onChange, className }) => {
+export const QuantityInput = forwardRef<HTMLInputElement, Props>(function QuantityInput({ value, defaultValue, onChange, className }, ref) {
   return (
     <div className={classNames('relative group', className)}>
       <input
+        ref={ref}
         type="number"
         min={0}
         value={value?.quantity}
         defaultValue={defaultValue?.quantity}
-        onChange={(e) => onChange(+e.target.value)}
+        onChange={(e) => onChange(e.target.value.length > 0 ? +e.target.value : undefined)}
         className={classNames(
           'form-control block w-full px-2 py-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500',
           'focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
@@ -32,6 +33,6 @@ export const QuantityInput: FC<Props> = ({ value, defaultValue, onChange, classN
       )}
     </div>
   );
-};
+});
 
 export default QuantityInput;

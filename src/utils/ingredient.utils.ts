@@ -1,5 +1,28 @@
-import { NutritionData, Quantity } from '@/models/ingredient.model';
+import { IngredientDetail, NutritionData, Quantity } from '@/models/ingredient.model';
 import { IngredientUnit } from '@prisma/client';
+
+export function reduceNutrition(
+  ingredients: { ingredient: IngredientDetail; quantity: Quantity }[],
+  key: keyof IngredientDetail['nutritionRef']
+) {
+  let anyMissing = false;
+  const sum = ingredients.reduce((agg, i) => {
+    const refValue = i.ingredient.nutritionRef[key];
+
+    if (refValue) {
+      const multiplier = computeMultiplier({ quantity: i.ingredient.quantityRef, unit: i.ingredient.unitRef }, i.quantity);
+      const value = (+refValue ?? 0) * multiplier;
+
+      agg += +value;
+    } else {
+      anyMissing = true;
+    }
+
+    return agg;
+  }, 0);
+
+  return anyMissing ? `~ ${sum}` : `${sum}`;
+}
 
 export function simplify(quantity: number, unit: IngredientUnit) {
   if (quantity !== 0) {
@@ -39,6 +62,10 @@ export function mapQuantity<From extends IngredientUnit, To extends IngredientUn
     quantity: (toRefUnit.quantity / refQuantity.quantity) * toSize,
     unit: toRefUnit.unit,
   };
+}
+
+export function mapKcal(quantityRef: number, kcalRef: number, toQuantity: number): number {
+  return (kcalRef / quantityRef) * toQuantity;
 }
 
 export function multifyNutrition(nutritionRef: NutritionData, multiplier: number): NutritionData {

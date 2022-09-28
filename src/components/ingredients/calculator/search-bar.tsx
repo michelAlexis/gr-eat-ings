@@ -25,6 +25,7 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
 
   const [query, setQuery] = useState<string>('');
   const [inputRef, setInputFocus] = useFocus();
+  const [quantityRef, setQuantityFocus] = useFocus();
 
   // Debound the query to prevent too fast fetching
   const debouncedQuery = useDebounce(query, 300);
@@ -49,6 +50,7 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
     setSelected(v);
     if (v && v.unitRef !== quantity.unit) {
       setQuantity({ quantity: getDefaultQuantity(v.unitRef), unit: v.unitRef });
+      setQuantityFocus();
     }
   };
 
@@ -85,17 +87,7 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
             ))}
         </Combobox.Options>
       </Combobox>
-      <QuantityInput value={quantity} onChange={(v) => setQuantity((q) => ({ ...q, quantity: v }))} />
-      {/* <div className="relative group">
-        <input
-          type="number"
-          min={0}
-          value={quantity.quantity}
-          onChange={(e) => setQuantity((q) => ({ ...q, quantity: e.target.value.length === 0 ? '' : +e.target.value }))}
-          className="form-control block w-full px-2 py-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        />
-        {quantity && <span className="absolute right-2 bottom-4 italic group-hover:mr-5 group-focus:mr-5">{quantity.unit}</span>}
-      </div> */}
+      <QuantityInput ref={quantityRef} value={quantity} onChange={(v) => setQuantity((q) => ({ ...q, quantity: v }))} />
       <button onClick={validate} className="p-3 bg-violet-700 text-white rounded-md hover:cursor-pointer hover:text-gray-200">
         <PlusIcon height="1.25rem" width="1.25rem" />
       </button>
