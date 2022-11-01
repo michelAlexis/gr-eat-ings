@@ -97,6 +97,9 @@ export const ingredientRouter = trpc
     }),
     resolve: async ({ input }) => {
       return await prisma.ingredient.create({
+        select: {
+          id: true,
+        },
         data: {
           name: input.name,
           unitRef: input.unitRef,

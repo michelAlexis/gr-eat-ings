@@ -1,10 +1,13 @@
+import { Button } from '@/components/common/Button';
 import { Layout } from '@/components/layout';
 import { getDefaultQuantity } from '@/utils/ingredient.utils';
 import { InferMutationInput, trpc } from '@/utils/trpc';
+import { AnyObject } from '@/utils/ts.utils';
 import { Listbox } from '@headlessui/react';
 import { IngredientUnit } from '@prisma/client';
+import clsx from 'clsx';
 import { FC, useMemo } from 'react';
-import { Control, FieldErrors, useController, useForm, useWatch } from 'react-hook-form';
+import { Control, FieldErrors, FieldPath, useController, useForm, useWatch } from 'react-hook-form';
 
 type CreateAction = InferMutationInput<'ingredients.create'>;
 
@@ -20,12 +23,11 @@ export const IngredientDetailPage = () => {
     },
   });
 
-  const mutation = trpc.useMutation('ingredients.create');
+  const { mutateAsync, isLoading } = trpc.useMutation('ingredients.create');
 
   const onSubmit = async (data: CreateAction) => {
     console.log('submit', data);
-
-    await mutation.mutateAsync(data);
+    await mutateAsync(data);
     reset();
   };
 
@@ -38,6 +40,9 @@ export const IngredientDetailPage = () => {
             {/* Name */}
             <InputNameTitle {...{ control, errors }} />
 
+            {/* Nutition table */}
+            <NutritionTable {...{ control, errors }} />
+
             {/* Unit ref */}
             <UnitRefDropdown {...{ control, errors }} />
 
@@ -45,9 +50,9 @@ export const IngredientDetailPage = () => {
             <NutritionForm {...{ control, errors }} />
 
             <div className="mt-3 bt-2 flex justify-end">
-              <button type="submit" className="bg-slate-500 hover:bg-slate-400 py-2 px-3 rounded-sm">
+              <Button type="submit" disabled={isLoading} intent="secondary">
                 Submit
-              </button>
+              </Button>
             </div>
           </form>
         </div>
@@ -75,7 +80,9 @@ const InputNameTitle: FC<{ control: Control<CreateAction>; errors: FieldErrors<C
         })}
         autoComplete="off"
         placeholder="Name"
-        className="text-2xl bg-transparent w-full"
+        className={clsx('text-6xl bg-transparent w-full border-0 border-b-[1px] focus:ring-0', {
+          'border-red-600': errors.name,
+        })}
       />
       <DefaultErrorMessage errors={errors.name} />
     </>
@@ -135,6 +142,113 @@ const NutritionForm: FC<{ control: Control<CreateAction>; errors: FieldErrors<Cr
         className="text-2xl bg-transparent w-full"
       />
       <DefaultErrorMessage errors={errors.nutritionRef?.kcal} />
+    </>
+  );
+};
+
+const NutritionTable: FC<{ control: Control<CreateAction>; errors: FieldErrors<CreateAction> }> = ({ control, errors }) => {
+  return (
+    <table className="border-1">
+      <tr className="border-1">
+        <th className="border-r-1"></th>
+        <th className="text-left text-xl p-2 w-32">
+          <span>100 Gr</span>
+        </th>
+      </tr>
+
+      {/* Energie - kJ */}
+      <tr>
+        <td rowSpan={2} className="border-r-1 p-2">
+          Energie
+        </td>
+        <td className="p-2">
+          <NutritionInput control={control} errors={errors.nutritionRef?.kcal} propertyPath="nutritionRef.kcal" unit="kJ" />
+        </td>
+      </tr>
+
+      {/* Energie - kcal */}
+      <tr className="border-b-1">
+        <td className="p-2">
+          <NutritionInput control={control} errors={errors.nutritionRef?.kcal} propertyPath="nutritionRef.kcal" unit="kcal" />
+        </td>
+      </tr>
+
+      {/* Fat */}
+      <tr>
+        <td className="border-r-1 p-2">Fat</td>
+        <td className="p-2">
+          <div>5.9 gr</div>
+        </td>
+      </tr>
+
+      {/* Fat - saturated */}
+      <tr className="border-b-1">
+        <td className="border-r-1 p-2">Saturated</td>
+        <td className="p-2">
+          <div>2.4gr</div>
+        </td>
+      </tr>
+
+      {/* Carb */}
+      <tr>
+        <td className="border-r-1 p-2">Carb</td>
+        <td className="p-2">
+          <div>61.9 gr</div>
+        </td>
+      </tr>
+
+      {/* Carb - sugar */}
+      <tr className="border-b-1">
+        <td className="border-r-1 p-2">Sugar</td>
+        <td className="p-2">
+          <div>10.6 gr</div>
+        </td>
+      </tr>
+
+      {/* Fiber */}
+      <tr className="border-b-1">
+        <td className="border-r-1 p-2">Fiber</td>
+        <td className="p-2">
+          <div>8.9 gr</div>
+        </td>
+      </tr>
+
+      {/* Protein */}
+      <tr className="border-b-1">
+        <td className="border-r-1 p-2">Protein</td>
+        <td className="p-2">
+          <div>10.5 gr</div>
+        </td>
+      </tr>
+
+      {/* Salt */}
+      <tr>
+        <td className="border-r-1 p-2">Salt</td>
+        <td className="p-2">
+          <div>0.05 gr</div>
+        </td>
+      </tr>
+    </table>
+  );
+};
+
+const NutritionInput: FC<{ control: Control<CreateAction>; errors?: AnyObject; propertyPath: FieldPath<CreateAction>; unit: string }> = ({
+  control,
+  errors,
+  propertyPath,
+  unit,
+}) => {
+  return (
+    <>
+      <input
+        type="number"
+        min={0}
+        {...control.register(propertyPath, {
+          valueAsNumber: true,
+        })}
+        className="border-0 bg-transparent w-full"
+      />
+      <DefaultErrorMessage errors={errors} />
     </>
   );
 };

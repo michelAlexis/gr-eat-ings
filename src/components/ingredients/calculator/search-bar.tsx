@@ -2,10 +2,10 @@ import { IngredientSearchResult, Quantity } from '@/models/ingredient.model';
 import { useFocus } from '@/utils/hooks/useFocus';
 import { useDebounce } from '@/utils/hooks/userDebounce';
 import { getDefaultQuantity } from '@/utils/ingredient.utils';
-import { classNames } from '@/utils/style.utils';
 import { trpc } from '@/utils/trpc';
 import { Combobox } from '@headlessui/react';
 import { CheckIcon, PlusIcon } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
 import { FC, Fragment, useEffect, useState } from 'react';
 import QuantityInput, { QuantityOrEmpty } from '../Quantity.input';
 
@@ -100,7 +100,7 @@ const NoResultOption: FC = () => {
     <Combobox.Option value={null} disabled={true} as={Fragment}>
       {() => (
         <li
-          className={classNames(
+          className={clsx(
             'bg-gray-500 text-black',
             'rounded-t-md mt-1',
             'rounded-b-md',
@@ -118,7 +118,7 @@ const IngredientOption: FC<{ ingredient: IngredientSearchResult; first: boolean;
     <Combobox.Option value={ingredient} as={Fragment}>
       {({ active, selected }) => (
         <li
-          className={classNames(
+          className={clsx(
             active ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black',
             first && 'rounded-t-md mt-1',
             last && 'rounded-b-md',

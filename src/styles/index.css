@@ -12,6 +12,24 @@ body {
     dark:bg-slate-600 dark:text-slate-50;
 }
 
+/* Border for 1px */
+/* FIXME Move to tailwind.config.js ? */
+.border-1 {
+    @apply border-[1px];
+}
+.border-t-1 {
+    @apply border-t-[1px];
+}
+.border-b-1 {
+    @apply border-b-[1px];
+}
+.border-l-1 {
+    @apply border-l-[1px];
+}
+.border-r-1 {
+    @apply border-r-[1px];
+}
+
 /* Force h-full on next-js content renderer */
 #__next {
     @apply h-full
