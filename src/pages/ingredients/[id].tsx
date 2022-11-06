@@ -4,23 +4,12 @@ import { AsyncReturnType } from '@/utils/ts.utils';
 import { GetServerSideProps, NextPage } from 'next';
 
 const getIngredientDetail = async (id: string) => {
-  const ingredient = await prisma.ingredient.findUnique({
+  return await prisma.ingredient.findUnique({
     rejectOnNotFound: true,
     where: {
       id,
     },
-    select: {
-      id: true,
-      name: true,
-      nutritionRef: {
-        select: {
-          kcal: true,
-        },
-      },
-    },
   });
-
-  return ingredient;
 };
 
 type IngredientDetail = AsyncReturnType<typeof getIngredientDetail>;
@@ -56,7 +45,7 @@ export const IngredientDetailPage: NextPage<{ ingredient: IngredientDetail }> = 
           <h2 className="text-2xl">{ingredient.name}</h2>
         </div>
         <div>
-          <span className="font-bold">Kcal</span> : {ingredient.nutritionRef.kcal}
+          <span className="font-bold">Kcal</span> : {ingredient.kcal}
         </div>
       </div>
     </Layout>

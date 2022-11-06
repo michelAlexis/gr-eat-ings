@@ -45,17 +45,17 @@ describe('mapQuantity function', () => {
   test('Should multiply from single size', () => {
     // The sintax is ex:
     // A receipe for 1 person need 100gr of something, how much does it need of it for x person ?
-    expect(mapQuantity(1, refQuantity, 1)).toStrictEqual<Quantity>({ quantity: 100, unit: 'gr' });
-    expect(mapQuantity(1, refQuantity, 2)).toStrictEqual<Quantity>({ quantity: 200, unit: 'gr' });
-    expect(mapQuantity(1, refQuantity, 0)).toStrictEqual<Quantity>({ quantity: 0, unit: 'gr' });
-    expect(mapQuantity(1, refQuantity, 0.5)).toStrictEqual<Quantity>({ quantity: 50, unit: 'gr' });
+    expect(mapQuantity({ quantity: 1, unit: 'gr' }, refQuantity, 1)).toStrictEqual<Quantity>({ quantity: 100, unit: 'gr' });
+    expect(mapQuantity({ quantity: 1, unit: 'gr' }, refQuantity, 2)).toStrictEqual<Quantity>({ quantity: 200, unit: 'gr' });
+    expect(mapQuantity({ quantity: 1, unit: 'gr' }, refQuantity, 0)).toStrictEqual<Quantity>({ quantity: 0, unit: 'gr' });
+    expect(mapQuantity({ quantity: 1, unit: 'gr' }, refQuantity, 0.5)).toStrictEqual<Quantity>({ quantity: 50, unit: 'gr' });
   });
 
   test('Should multiply from any size', () => {
-    expect(mapQuantity(2, refQuantity, 0)).toStrictEqual<Quantity>({ quantity: 0, unit: 'gr' });
-    expect(mapQuantity(2, refQuantity, 1)).toStrictEqual<Quantity>({ quantity: 50, unit: 'gr' });
-    expect(mapQuantity(2, refQuantity, 4)).toStrictEqual<Quantity>({ quantity: 200, unit: 'gr' });
-    expect(mapQuantity(4, refQuantity, 10)).toStrictEqual<Quantity>({ quantity: 250, unit: 'gr' });
+    expect(mapQuantity({ quantity: 2, unit: 'gr' }, refQuantity, 0)).toStrictEqual<Quantity>({ quantity: 0, unit: 'gr' });
+    expect(mapQuantity({ quantity: 2, unit: 'gr' }, refQuantity, 1)).toStrictEqual<Quantity>({ quantity: 50, unit: 'gr' });
+    expect(mapQuantity({ quantity: 2, unit: 'gr' }, refQuantity, 4)).toStrictEqual<Quantity>({ quantity: 200, unit: 'gr' });
+    expect(mapQuantity({ quantity: 4, unit: 'gr' }, refQuantity, 10)).toStrictEqual<Quantity>({ quantity: 250, unit: 'gr' });
   });
 });
 

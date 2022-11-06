@@ -19,42 +19,34 @@ enum IngredientUnit {
 }
 
 model Ingredient {
-  id String @id @default(cuid())
-
-  name           String         @db.VarChar(100)
-  unitRef        IngredientUnit
-  quantityRef    Int
-  nutritionRefId String         @unique
-  nutritionRef   Nutrition      @relation(fields: [nutritionRefId], references: [id])
-
-  // audit
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id                 String               @id @default(cuid())
+  // Properties
+  name               String               @db.VarChar(100)
+  quantityRef        Int
+  unitRef            IngredientUnit
+  // Nutrition
+  kcal               Int?
+  fat                Float?
+  fatSaturated       Float?
+  carb               Float?
+  sugar              Float?
+  fiber              Float?
+  protein            Float?
+  salt               Float?
+  // Ingredients
   IngredientQuantity IngredientQuantity[]
+  // audit
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
 
   @@fulltext([name])
 }
 
-model Nutrition {
-  id String @id @default(cuid())
-
-  ingredient Ingredient?
-
-  kcal Int?
-  // TODO Add fat, carb, prot, ...
-
-  // audit
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Recipe {
-  id String @id @default(cuid())
-
-  name          String @db.VarChar(100)
-  sizeReference Int
-
+  id                 String               @id @default(cuid())
+  // Properties
+  name               String               @db.VarChar(100)
+  sizeReference      Int
   // audit
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
@@ -62,28 +54,19 @@ model Recipe {
 }
 
 model IngredientQuantity {
-  id String @id @default(cuid())
-
-  recipeId String
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
-
+  id           String         @id @default(cuid())
+  // Recipe
+  recipeId     String
+  recipe       Recipe         @relation(fields: [recipeId], references: [id])
+  // Ingredient
   ingredientId String
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
-
-  quantity Float @db.Float
-  unit     Unit
-
+  ingredient   Ingredient     @relation(fields: [ingredientId], references: [id])
+  // Properties
+  quantity     Float          @db.Float
+  unit         IngredientUnit
   // audit
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 
   @@unique([recipeId, ingredientId])
-}
-
-enum Unit {
-  unique
-  gr
-  kg
-  ml
-  l
 }

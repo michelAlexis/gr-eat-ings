@@ -29,18 +29,6 @@ export const ingredientRouter = trpc
         where: {
           id: input.id,
         },
-        select: {
-          id: true,
-          name: true,
-          unitRef: true,
-          quantityRef: true,
-          nutritionRef: {
-            select: {
-              id: true,
-              kcal: true,
-            },
-          },
-        },
       });
     },
   })
@@ -55,7 +43,7 @@ export const ingredientRouter = trpc
         return [];
       }
 
-      const results = await prisma.ingredient.findMany({
+      return prisma.ingredient.findMany({
         where: {
           name: { contains: input.query },
           id: input.exclude && input.exclude?.length > 0 ? { notIn: input.exclude } : undefined,
@@ -69,31 +57,23 @@ export const ingredientRouter = trpc
           name: true,
           unitRef: true,
           quantityRef: true,
-          nutritionRef: {
-            select: {
-              id: true,
-              kcal: true,
-            },
-          },
+          kcal: true,
         },
       });
-
-      return results.map((r) => ({
-        id: r.id,
-        name: r.name,
-        unitRef: r.unitRef,
-        quantityRef: r.quantityRef,
-        kcalRef: r.nutritionRef?.kcal,
-      }));
     },
   })
   .mutation('create', {
     input: z.object({
       name: z.string()?.min(1).max(100),
       unitRef: z.nativeEnum(IngredientUnit),
-      nutritionRef: z.object({
-        kcal: z.number().int().min(0).nullable(),
-      }),
+      kcal: z.number().int().min(0).nullable(),
+      fat: z.number().min(0).nullable(),
+      fatSaturated: z.number().min(0).nullable(),
+      carb: z.number().min(0).nullable(),
+      sugar: z.number().min(0).nullable(),
+      fiber: z.number().min(0).nullable(),
+      protein: z.number().min(0).nullable(),
+      salt: z.number().min(0).nullable(),
     }),
     resolve: async ({ input }) => {
       return await prisma.ingredient.create({
@@ -101,12 +81,8 @@ export const ingredientRouter = trpc
           id: true,
         },
         data: {
-          name: input.name,
-          unitRef: input.unitRef,
+          ...input,
           quantityRef: getDefaultQuantity(input.unitRef),
-          nutritionRef: {
-            create: input.nutritionRef,
-          },
         },
       });
     },

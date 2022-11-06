@@ -28,6 +28,7 @@ export const IngredientDetailPage = () => {
   const onSubmit = async (data: CreateAction) => {
     console.log('submit', data);
     await mutateAsync(data);
+    alert(`Ingredient "${data.name}" created with success`);
     reset();
   };
 
@@ -45,9 +46,6 @@ export const IngredientDetailPage = () => {
 
             {/* Unit ref */}
             <UnitRefDropdown {...{ control, errors }} />
-
-            {/* Nutrition */}
-            <NutritionForm {...{ control, errors }} />
 
             <div className="mt-3 bt-2 flex justify-end">
               <Button type="submit" disabled={isLoading} intent="secondary">
@@ -80,9 +78,7 @@ const InputNameTitle: FC<{ control: Control<CreateAction>; errors: FieldErrors<C
         })}
         autoComplete="off"
         placeholder="Name"
-        className={clsx('text-6xl bg-transparent w-full border-0 border-b-[1px] focus:ring-0', {
-          'border-red-600': errors.name,
-        })}
+        className={clsx('text-6xl bg-transparent w-full border-0 border-b-[1px] focus:ring-0', errors.name && 'border-red-600')}
       />
       <DefaultErrorMessage errors={errors.name} />
     </>
@@ -129,127 +125,117 @@ const UnitRefDropdown: FC<{ control: Control<CreateAction>; errors: FieldErrors<
   );
 };
 
-const NutritionForm: FC<{ control: Control<CreateAction>; errors: FieldErrors<CreateAction> }> = ({ control, errors }) => {
-  return (
-    <>
-      <input
-        type="number"
-        min={0}
-        {...control.register('nutritionRef.kcal', {
-          valueAsNumber: true,
-        })}
-        placeholder="Kcal"
-        className="text-2xl bg-transparent w-full"
-      />
-      <DefaultErrorMessage errors={errors.nutritionRef?.kcal} />
-    </>
-  );
-};
-
 const NutritionTable: FC<{ control: Control<CreateAction>; errors: FieldErrors<CreateAction> }> = ({ control, errors }) => {
   return (
-    <table className="border-1">
-      <tr className="border-1">
-        <th className="border-r-1"></th>
-        <th className="text-left text-xl p-2 w-32">
-          <span>100 Gr</span>
-        </th>
-      </tr>
+    <table className="border">
+      <tbody>
+        <tr className="border">
+          <th className="border-r w-50p"></th>
+          <th className="text-left text-xl p-2 w-50p">
+            <span>100 Gr</span>
+          </th>
+        </tr>
 
-      {/* Energie - kJ */}
-      <tr>
-        <td rowSpan={2} className="border-r-1 p-2">
-          Energie
-        </td>
-        <td className="p-2">
-          <NutritionInput control={control} errors={errors.nutritionRef?.kcal} propertyPath="nutritionRef.kcal" unit="kJ" />
-        </td>
-      </tr>
+        {/* Energie - kJ */}
+        <tr>
+          <td rowSpan={2} className="border-r p-2">
+            Energie
+          </td>
+          <td className="p-2">
+            <NutritionInput control={control} errors={errors.kcal} propertyPath="kcal" unit="kcal" />
+          </td>
+        </tr>
 
-      {/* Energie - kcal */}
-      <tr className="border-b-1">
-        <td className="p-2">
-          <NutritionInput control={control} errors={errors.nutritionRef?.kcal} propertyPath="nutritionRef.kcal" unit="kcal" />
-        </td>
-      </tr>
+        {/* Energie - kcal */}
+        <tr className="border-b">
+          <td className="p-2">{/* <NutritionInput control={control} errors={errors.kcal} propertyPath="kcal" unit="kcal" /> */}</td>
+        </tr>
 
-      {/* Fat */}
-      <tr>
-        <td className="border-r-1 p-2">Fat</td>
-        <td className="p-2">
-          <div>5.9 gr</div>
-        </td>
-      </tr>
+        {/* Fat */}
+        <tr>
+          <td className="border-r p-2">Fat</td>
+          <td className="p-2">
+            <NutritionInput control={control} errors={errors.fat} propertyPath="fat" unit="g" />
+          </td>
+        </tr>
 
-      {/* Fat - saturated */}
-      <tr className="border-b-1">
-        <td className="border-r-1 p-2">Saturated</td>
-        <td className="p-2">
-          <div>2.4gr</div>
-        </td>
-      </tr>
+        {/* Fat - saturated */}
+        <tr className="border-b">
+          <td className="border-r p-2">Saturated</td>
+          <td className="p-2">
+            <NutritionInput control={control} errors={errors.fatSaturated} propertyPath="fatSaturated" unit="g" />
+          </td>
+        </tr>
 
-      {/* Carb */}
-      <tr>
-        <td className="border-r-1 p-2">Carb</td>
-        <td className="p-2">
-          <div>61.9 gr</div>
-        </td>
-      </tr>
+        {/* Carb */}
+        <tr>
+          <td className="border-r p-2">Carb</td>
+          <td className="p-2">
+            <NutritionInput control={control} errors={errors.carb} propertyPath="carb" unit="g" />
+          </td>
+        </tr>
 
-      {/* Carb - sugar */}
-      <tr className="border-b-1">
-        <td className="border-r-1 p-2">Sugar</td>
-        <td className="p-2">
-          <div>10.6 gr</div>
-        </td>
-      </tr>
+        {/* Carb - sugar */}
+        <tr className="border-b">
+          <td className="border-r p-2">Sugar</td>
+          <td className="p-2">
+            <NutritionInput control={control} errors={errors.sugar} propertyPath="sugar" unit="g" />
+          </td>
+        </tr>
 
-      {/* Fiber */}
-      <tr className="border-b-1">
-        <td className="border-r-1 p-2">Fiber</td>
-        <td className="p-2">
-          <div>8.9 gr</div>
-        </td>
-      </tr>
+        {/* Fiber */}
+        <tr className="border-b">
+          <td className="border-r p-2">Fiber</td>
+          <td className="p-2">
+            <NutritionInput control={control} errors={errors.fiber} propertyPath="fiber" unit="g" />
+          </td>
+        </tr>
 
-      {/* Protein */}
-      <tr className="border-b-1">
-        <td className="border-r-1 p-2">Protein</td>
-        <td className="p-2">
-          <div>10.5 gr</div>
-        </td>
-      </tr>
+        {/* Protein */}
+        <tr className="border-b">
+          <td className="border-r p-2">Protein</td>
+          <td className="p-2">
+            <NutritionInput control={control} errors={errors.protein} propertyPath="protein" unit="g" />
+          </td>
+        </tr>
 
-      {/* Salt */}
-      <tr>
-        <td className="border-r-1 p-2">Salt</td>
-        <td className="p-2">
-          <div>0.05 gr</div>
-        </td>
-      </tr>
+        {/* Salt */}
+        <tr>
+          <td className="border-r p-2">Salt</td>
+          <td className="p-2">
+            <NutritionInput control={control} errors={errors.salt} propertyPath="salt" unit="g" />
+          </td>
+        </tr>
+      </tbody>
     </table>
   );
 };
 
-const NutritionInput: FC<{ control: Control<CreateAction>; errors?: AnyObject; propertyPath: FieldPath<CreateAction>; unit: string }> = ({
-  control,
-  errors,
-  propertyPath,
-  unit,
-}) => {
+const NutritionInput: FC<{
+  control: Control<CreateAction>;
+  errors?: AnyObject;
+  propertyPath: FieldPath<CreateAction>;
+  unit: string;
+}> = ({ control, errors, propertyPath, unit }) => {
   return (
-    <>
+    <div className="relative group">
       <input
         type="number"
         min={0}
+        step="any"
         {...control.register(propertyPath, {
           valueAsNumber: true,
+          min: 0,
         })}
-        className="border-0 bg-transparent w-full"
+        className={clsx(
+          'block border-0 bg-transparent w-full px-2 py-4 text-sm rounded-lg text-gray-900',
+          'bg-gray-50 border-gray-300 focus:ring-blue-500 focus:border-blue-500',
+          'dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+        )}
       />
+      <span className="absolute right-2 bottom-4 group-hover:mr-5 group-focus:mr-5 next-to-input-focus">{unit}</span>
       <DefaultErrorMessage errors={errors} />
-    </>
+    </div>
   );
 };
 

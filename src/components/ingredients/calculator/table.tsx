@@ -23,7 +23,7 @@ export const NewIngredientCalculatorTable: FC<{
         </thead>
         <tbody>
           {data.map((d, i) => (
-            <TableRow key={d.ingredient.id} {...d} onRemove={onRemove} onQuantityChange={(v) => onUpdate(i, v)} />
+            <TableRow key={d.ingredient.id} {...d} onRemove={onRemove} onQuantityChange={(v) => onUpdate(i, v ?? 0)} />
           ))}
         </tbody>
         <tfoot>
@@ -45,7 +45,7 @@ const TableRow: FC<{
   ingredient: IngredientDetail;
   quantity: Quantity;
   onRemove: (id: string) => void;
-  onQuantityChange: (q: number) => void;
+  onQuantityChange: (q: number | undefined) => void;
 }> = ({ ingredient, quantity, onRemove, onQuantityChange }) => {
   return (
     <tr>
@@ -59,7 +59,7 @@ const TableRow: FC<{
             </a>
           </Link>
           <span className="text-gray-400 text-sm pr-3">
-            {ingredient.nutritionRef.kcal ? `(${ingredient.nutritionRef.kcal} kcal / ${ingredient.quantityRef} ${ingredient.unitRef})` : ''}
+            {ingredient.kcal ? `(${ingredient.kcal} kcal / ${ingredient.quantityRef} ${ingredient.unitRef})` : ''}
           </span>
         </div>
       </td>
@@ -70,9 +70,7 @@ const TableRow: FC<{
       </td>
 
       {/* Kcal */}
-      <td className="pl-4 text-right">
-        {ingredient.nutritionRef.kcal ? mapKcal(ingredient.quantityRef, ingredient.nutritionRef.kcal, quantity.quantity) : '?'}
-      </td>
+      <td className="pl-4 text-right">{ingredient.kcal ? mapKcal(ingredient.quantityRef, ingredient.kcal, quantity.quantity) : '?'}</td>
 
       {/* Remove action */}
       <td className="pl-4 text-right">

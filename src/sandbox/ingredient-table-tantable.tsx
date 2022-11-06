@@ -36,7 +36,7 @@ export const IngredientCalculatorTable: FC<{
       accessorFn: (i) => i.quantity,
       cell: ({ cell, row, column, table, getValue }) => {
         const quantity = cell.getValue<Quantity>();
-        const onChange = (input: number) => {
+        const onChange = (input: number | undefined) => {
           console.log('New quantity', input);
           // onUpdate(row.index, column.id, { ...quantity, quantity: input ?? 0 });
         };
@@ -48,7 +48,7 @@ export const IngredientCalculatorTable: FC<{
     },
     {
       id: 'kcal',
-      accessorFn: (i) => (i.ingredient.nutritionRef.kcal ?? 0) * 1,
+      accessorFn: (i) => (i.ingredient.kcal ?? 0) * 1,
       header: () => <div className="w-32">Kcal</div>,
       footer: () => <span className="font-bold">{reduceNutrition(data, 'kcal')} kcal</span>,
     },

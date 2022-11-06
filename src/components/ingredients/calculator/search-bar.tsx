@@ -1,8 +1,8 @@
-import { IngredientSearchResult, Quantity } from '@/models/ingredient.model';
+import { Quantity } from '@/models/ingredient.model';
 import { useFocus } from '@/utils/hooks/useFocus';
 import { useDebounce } from '@/utils/hooks/userDebounce';
 import { getDefaultQuantity } from '@/utils/ingredient.utils';
-import { trpc } from '@/utils/trpc';
+import { InferQueryOutput, trpc } from '@/utils/trpc';
 import { Combobox } from '@headlessui/react';
 import { CheckIcon, PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
@@ -10,6 +10,7 @@ import { FC, Fragment, useEffect, useState } from 'react';
 import QuantityInput, { QuantityOrEmpty } from '../Quantity.input';
 
 export type OnAddParams = { id: string; quantity: Quantity };
+type IngredientSearchResult = InferQueryOutput<'ingredients.search'>[number];
 
 interface Props {
   exclude: string[];
@@ -125,9 +126,9 @@ const IngredientOption: FC<{ ingredient: IngredientSearchResult; first: boolean;
             'flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
           )}>
           <span className="flex-1">{ingredient.name}</span>
-          {ingredient.kcalRef && (
+          {ingredient.kcal && (
             <span>
-              {ingredient.kcalRef} kcal / {ingredient.quantityRef} {ingredient.unitRef}
+              {ingredient.kcal} kcal / {ingredient.quantityRef} {ingredient.unitRef}
             </span>
           )}
           {selected && <CheckIcon className="h-5 w-5 ml-3" />}
