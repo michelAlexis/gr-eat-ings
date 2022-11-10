@@ -22,7 +22,7 @@ export const IngredientCalculatorTable: FC<{
         return (
           <>
             <Link href={`/ingredients/${ingredient.id}`}>
-              <a className="hover:text-blue-400 hover:border-b-[1px] border-blue-400">
+              <a className="hover:text-blue-400 hover:border-b border-blue-400">
                 <span className="mr-2">{ingredient.name}</span>
                 <LinkIcon height="1rem" className="inline-flex" />
               </a>

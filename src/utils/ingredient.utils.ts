@@ -1,6 +1,10 @@
 import { IngredientDetail, NutritionData, Quantity } from '@/models/ingredient.model';
 import { IngredientUnit } from '@prisma/client';
 
+export function kcalTokJ(kcal: number) {
+  return kcal * 4.184;
+}
+
 export function reduceNutrition(ingredients: { ingredient: IngredientDetail; quantity: Quantity }[], key: keyof NutritionData) {
   let anyMissing = false;
   const sum = ingredients.reduce((agg, i) => {
