@@ -62,6 +62,14 @@ export const ingredientRouter = trpc
       });
     },
   })
+  .query('seach-by-barcode', {
+    input: z.object({
+      barcode: z.string(),
+    }),
+    resolve: async ({ input }) => {
+      return [];
+    },
+  })
   .mutation('create', {
     input: z.object({
       name: z.string()?.min(1).max(100),

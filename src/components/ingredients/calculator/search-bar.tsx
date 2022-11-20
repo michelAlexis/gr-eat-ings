@@ -6,7 +6,7 @@ import { InferQueryOutput, trpc } from '@/utils/trpc';
 import { Combobox } from '@headlessui/react';
 import { CheckIcon, PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
-import { FC, Fragment, useEffect, useState } from 'react';
+import { FC, forwardRef, Fragment, useEffect, useState } from 'react';
 import QuantityInput, { QuantityOrEmpty } from '../Quantity.input';
 
 export type OnAddParams = { id: string; quantity: Quantity };
@@ -24,28 +24,8 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
     unit: 'gr',
   });
 
-  const [query, setQuery] = useState<string>('');
-  const [inputRef, setInputFocus] = useFocus();
   const [quantityRef, setQuantityFocus] = useFocus();
-
-  // Debound the query to prevent too fast fetching
-  const debouncedQuery = useDebounce(query, 300);
-
-  const { data, refetch, isLoading } = trpc.useQuery(['ingredients.search', { query: debouncedQuery, exclude }], {
-    keepPreviousData: true,
-    enabled: false,
-  });
-
-  const results = data ?? [];
-
-  const minQueryLenght = 3;
-
-  // Filter the query to prevent overfetching
-  useEffect(() => {
-    if (debouncedQuery.length >= minQueryLenght) {
-      refetch();
-    }
-  }, [debouncedQuery, refetch]);
+  const [inputRef, setInputFocus] = useFocus();
 
   const onIngredientSelect = (v: IngredientSearchResult | null) => {
     setSelected(v);
@@ -59,35 +39,14 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
     if (selected && quantity.quantity !== undefined && quantity.quantity !== 0) {
       onAdd({ id: selected.id, quantity: { unit: quantity.unit, quantity: quantity.quantity } });
       setSelected(null);
-      setQuery('');
+      // setQuery('');
       setInputFocus();
     }
   };
 
   return (
     <div className="flex justify-between gap-1">
-      <Combobox as="div" value={selected} onChange={onIngredientSelect} className="relative grow">
-        <Combobox.Input
-          ref={inputRef}
-          onChange={(event) => setQuery(event.target.value)}
-          displayValue={(ingredient: IngredientSearchResult) => ingredient?.name}
-          placeholder="Search Ingredients..."
-          required
-          autoComplete="off"
-          className="block px-2 py-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        />
-        {!isLoading && query?.length > 0 && query?.length < minQueryLenght && (
-          <span className="absolute right-2 bottom-4 italic">Minimum {minQueryLenght} characteres</span>
-        )}
-        {isLoading && <span className="absolute right-2 bottom-4 italic">Loading</span>}
-        <Combobox.Options as="ul" className="absolute w-full text-sm rounded-md text-gray-700 dark:text-gray-200">
-          {results.length === 0 && !isLoading && query.length >= minQueryLenght && <NoResultOption />}
-          {results.length > 0 &&
-            results.map((ingredient, i) => (
-              <IngredientOption key={i} ingredient={ingredient} first={i === 0} last={i === results.length - 1} />
-            ))}
-        </Combobox.Options>
-      </Combobox>
+      <IngredientSearchBar exclude={exclude} selected={selected} onIngredientSelect={onIngredientSelect} ref={inputRef} />
       <QuantityInput ref={quantityRef} value={quantity} onChange={(v) => setQuantity((q) => ({ ...q, quantity: v }))} />
       <button onClick={validate} className="p-3 bg-violet-700 text-white rounded-md hover:cursor-pointer hover:text-gray-200">
         <PlusIcon height="1.25rem" width="1.25rem" />
@@ -95,6 +54,63 @@ export const IngredientCalculatorSearchBar: FC<Props> = ({ exclude, onAdd }) => 
     </div>
   );
 };
+
+interface IngredientSearchBarProps {
+  query?: string;
+  setQuery?: (query: string) => void;
+  selected?: IngredientSearchResult | null;
+  onIngredientSelect?: (selected: IngredientSearchResult | null) => void;
+  exclude?: string[];
+}
+export const IngredientSearchBar = forwardRef<HTMLInputElement, IngredientSearchBarProps>(function IngredientSearchBar(props, ref) {
+  const [query, setQuery] = useState<string>('');
+
+  // Debound the query to prevent too fast fetching
+  const debouncedQuery = useDebounce(query, 300);
+
+  const { data, refetch, isLoading } = trpc.useQuery(['ingredients.search', { query: debouncedQuery, exclude: props.exclude }], {
+    keepPreviousData: true,
+    enabled: false,
+  });
+
+  const minQueryLenght = 3;
+
+  // Filter the query to prevent overfetching
+  useEffect(() => {
+    if (debouncedQuery.length >= minQueryLenght) {
+      refetch();
+    }
+  }, [debouncedQuery, refetch]);
+
+  const results = data ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const onChange = props.onIngredientSelect ?? (() => {});
+
+  return (
+    <Combobox as="div" value={props.selected} onChange={onChange} className="relative grow">
+      <Combobox.Input
+        ref={ref}
+        onChange={(event) => setQuery(event.target.value)}
+        displayValue={(ingredient: IngredientSearchResult) => ingredient?.name}
+        placeholder="Search Ingredients..."
+        required
+        autoComplete="off"
+        className="block px-2 py-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      />
+      {!isLoading && query?.length > 0 && query?.length < minQueryLenght && (
+        <span className="absolute right-2 bottom-4 italic">Minimum {minQueryLenght} characteres</span>
+      )}
+      {isLoading && <span className="absolute right-2 bottom-4 italic">Loading</span>}
+      <Combobox.Options as="ul" className="absolute w-full text-sm rounded-md text-gray-700 dark:text-gray-200">
+        {results.length === 0 && !isLoading && query.length >= minQueryLenght && <NoResultOption />}
+        {results.length > 0 &&
+          results.map((ingredient, i) => (
+            <IngredientOption key={i} ingredient={ingredient} first={i === 0} last={i === results.length - 1} />
+          ))}
+      </Combobox.Options>
+    </Combobox>
+  );
+});
 
 const NoResultOption: FC = () => {
   return (

@@ -7,12 +7,12 @@ import { Listbox } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import { IngredientUnit } from '@prisma/client';
 import clsx from 'clsx';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { Control, FieldErrors, FieldPath, useController, useForm, useWatch } from 'react-hook-form';
 
 type CreateAction = InferMutationInput<'ingredients.create'>;
 
-export const IngredientDetailPage = () => {
+export const IngredientDetailPage: FC = () => {
   const {
     control,
     handleSubmit,
@@ -27,7 +27,6 @@ export const IngredientDetailPage = () => {
   const { mutateAsync, isLoading } = trpc.useMutation('ingredients.create');
 
   const onSubmit = async (data: CreateAction) => {
-    console.log('submit', data);
     await mutateAsync(data);
     alert(`Ingredient "${data.name}" created with success`);
     reset();
@@ -38,6 +37,12 @@ export const IngredientDetailPage = () => {
     <Layout title="Ingredients">
       <div className="flex flex-col items-center">
         <div className="min-w-[600px]">
+          {/* Bar code encode */}
+          <div className="border-b py-3">
+            <BarCodeSearch />
+          </div>
+
+          {/* Manual form */}
           <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="mb-4 flex flex-col gap-2">
             {/* Name */}
             <InputNameTitle {...{ control, errors }} />
@@ -80,6 +85,19 @@ const InputNameTitle: FC<{ control: Control<CreateAction>; errors: FieldErrors<C
       />
       <DefaultErrorMessage errors={errors.name} />
     </>
+  );
+};
+
+const BarCodeSearch: FC = () => {
+  const [code, setCode] = useState('');
+  return (
+    <input
+      type="number"
+      min={0}
+      value={code}
+      onChange={(e) => setCode(e.target.value)}
+      className="text-5xl bg-transparent w-full border-0 border-b focus:ring-0"
+    />
   );
 };
 

@@ -41,6 +41,7 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Create ingredient', href: '/ingredients/create' },
   { name: 'Calculator', href: '/ingredients/calculator' },
+  { name: 'Create recipe', href: '/recipe/create' },
   { name: 'About', href: '/about' },
 ];
 const userNavigation = [
