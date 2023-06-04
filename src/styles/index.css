@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    @apply h-full
+}
+
 body {
-    @apply bg-slate-600 text-slate-50;
+    @apply h-full antialiased
+    bg-gray-100
+    dark:bg-slate-600 dark:text-slate-50;
+}
+
+/* Force h-full on next-js content renderer */
+#__next {
+    @apply h-full
+}
+
+input[type=number]:focus + .next-to-input-focus {
+    @apply mr-5;
 }
