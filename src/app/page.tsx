@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { UserButton, SignInButton } from "@clerk/nextjs";
+import Counter from '~/components/counter';
 
 const Home: NextPage = () => {
   return (
@@ -13,6 +14,10 @@ const Home: NextPage = () => {
           <div className='bg-white'>
             <UserButton afterSignOutUrl='/' />
             <SignInButton />
+          </div>
+
+          <div>
+            <Counter />
           </div>
         </div>
       </main>

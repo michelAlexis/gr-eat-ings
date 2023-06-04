@@ -4,6 +4,8 @@
  */
 await import("./src/env.mjs");
 
+const { withAxiom } = await import('next-axiom');
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -19,4 +21,4 @@ const config = {
     defaultLocale: "en",
   },
 };
-export default config;
+export default withAxiom(config);

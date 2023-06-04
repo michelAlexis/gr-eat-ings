@@ -1,5 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
+// TODO Vérifier si c'est ok
+export { reportWebVitals } from 'next-axiom';
 import { Inter } from 'next/font/google';
 
 import "~/styles/globals.css";
