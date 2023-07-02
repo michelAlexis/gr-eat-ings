@@ -1,3 +1,5 @@
+import { Header } from "@/components/layout/header";
+import { cn } from "@/utils/ui";
 import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
 // TODO Vérifier si c'est ok
@@ -24,7 +26,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={cn(
+          'flex flex-col dark',
+          inter.className
+        )}>
+          <Header />
+          <div className="">
+            {children}
+          </div>
+        </body>
       </html>
     </ClerkProvider>
   );
