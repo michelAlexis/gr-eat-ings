@@ -22,11 +22,8 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/utils/*": [
-        "./src/utils/*"
+      "@/*": [
+        "./src/*"
       ]
     },
     "plugins": [

@@ -1,5 +1,8 @@
+import IngredientForm from "./ingredient-form";
+
+
 export default function Page() {
-  return <>
-    Create ingredient form
-  </>;
+  return <div className="m-auto max-w-xl">
+    <IngredientForm />
+  </div>;
 }

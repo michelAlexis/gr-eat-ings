@@ -6,7 +6,7 @@ import { type Metadata } from "next";
 export { reportWebVitals } from 'next-axiom';
 import { Inter } from 'next/font/google';
 
-import "~/styles/globals.css";
+import "@/styles/globals.css";
 
 const inter = Inter({ subsets: ['latin'] })
 
