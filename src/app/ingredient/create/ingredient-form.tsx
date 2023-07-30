@@ -1,34 +1,22 @@
 "use client"
 
-import { Control, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { IngredientCreateAction, ingredientCreateSchema } from "@/models/ingredient";
+import { api } from "@/utils/api";
 import { cn } from "@/utils/ui";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Control, useForm } from "react-hook-form";
 
-const ingredientScheam = z.object({
-  name: z.string().trim().min(2).max(100),
-  description: z.string().trim().max(1000),
-  unit: z.enum(['gr', 'ml']),
-  quantiy: z.number().int().min(0),
-  kcal: z.number().int().min(0),
-  fat: z.number().int().min(0),
-  fatSaturated: z.number().int().min(0),
-  carb: z.number().int().min(0),
-  sugar: z.number().int().min(0),
-  fiber: z.number().int().min(0),
-  protein: z.number().int().min(0),
-  salt: z.number().int().min(0),
-});
-type CreateIngredientAction = z.infer<typeof ingredientScheam>;
 
 export default function IngredientForm() {
-  const form = useForm<CreateIngredientAction>({
-    resolver: zodResolver(ingredientScheam),
+  const { mutate, error, data, isLoading } = api.ingredient.create.useMutation();
+
+  const form = useForm<IngredientCreateAction>({
+    resolver: zodResolver(ingredientCreateSchema),
     defaultValues: {
       name: '',
       description: '',
@@ -45,8 +33,9 @@ export default function IngredientForm() {
     }
   });
 
-  function onSubmit(value: CreateIngredientAction) {
+  function onSubmit(value: IngredientCreateAction) {
     console.log('done', value);
+    mutate(value);
   }
   return (
     <Form {...form}>
@@ -106,14 +95,14 @@ export default function IngredientForm() {
         </div>
 
         <div className="flex flex-row-reverse">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isLoading}>Submit</Button>
         </div>
       </form>
     </Form >
   );
 }
 
-function UnitFormField({ control }: { control: Control<CreateIngredientAction> }) {
+function UnitFormField({ control }: { control: Control<IngredientCreateAction> }) {
   return (
     <FormField control={control} name="unit" render={({ field }) => (
       <>
@@ -131,7 +120,7 @@ function UnitFormField({ control }: { control: Control<CreateIngredientAction> }
   );
 }
 
-function NutritionField({ control, name, label, unit, shifted }: { control: Control<CreateIngredientAction>, name: keyof CreateIngredientAction, label: string, unit: string, shifted?: boolean }) {
+function NutritionField({ control, name, label, unit, shifted }: { control: Control<IngredientCreateAction>, name: keyof IngredientCreateAction, label: string, unit: string, shifted?: boolean }) {
   return (
 
     <FormField control={control} name={name} render={({ field }) => (
