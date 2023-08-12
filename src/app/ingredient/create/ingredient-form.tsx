@@ -10,10 +10,12 @@ import { api } from "@/utils/api";
 import { cn } from "@/utils/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Control, useForm } from "react-hook-form";
+import { createAction } from "./action";
 
 
 export default function IngredientForm() {
-  const { mutate, error, data, isLoading } = api.ingredient.create.useMutation();
+  // const { mutate, error, data, isLoading } = api.ingredient.create.useMutation();
+  const isLoading = false;
 
   const form = useForm<IngredientCreateAction>({
     resolver: zodResolver(ingredientCreateSchema),
@@ -35,11 +37,12 @@ export default function IngredientForm() {
 
   function onSubmit(value: IngredientCreateAction) {
     console.log('done', value);
-    mutate(value);
+    // mutate(value);
   }
+  // onSubmit={form.handleSubmit(onSubmit)} 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+      <form className="space-y-3" action={createAction}>
         {/*Name*/}
         <FormField control={form.control} name="name" render={({ field }) => (
           <FormItem>

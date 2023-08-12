@@ -22,6 +22,7 @@ const config = {
   // },
   experimental: {
     appDir: true,
+    serverActions: true,
   }
 };
 export default withAxiom(config);
