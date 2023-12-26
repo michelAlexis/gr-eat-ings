@@ -27,6 +27,5 @@ export const actions: Actions = {
                 errors,
             });
         }
-        return { status: 201 };
     },
 };
