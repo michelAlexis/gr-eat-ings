@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "ebae69d9-bc5a-41d9-a3ca-6208095f3f49",
+  "id": "9469506a-ea2a-47e1-9985-33799f35fc83",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "ingredients": {
@@ -20,6 +20,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
         },
         "ref_unit": {
           "name": "ref_unit",
@@ -47,49 +55,49 @@
         },
         "fat": {
           "name": "fat",
-          "type": "int",
+          "type": "float",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "fat_saturated": {
           "name": "fat_saturated",
-          "type": "int",
+          "type": "float",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "carbs": {
           "name": "carbs",
-          "type": "int",
+          "type": "float",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "sugar": {
           "name": "sugar",
-          "type": "int",
+          "type": "float",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "fiber": {
           "name": "fiber",
-          "type": "int",
+          "type": "float",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
         "protein": {
           "name": "protein",
-          "type": "int",
+          "type": "float",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "sodium": {
-          "name": "sodium",
-          "type": "int",
+        "salt": {
+          "name": "salt",
+          "type": "float",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

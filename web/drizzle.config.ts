@@ -6,6 +6,7 @@ export default defineConfig({
   out: './drizzle',
   driver: 'mysql2', 
   dbCredentials: {
+    uri: process.env.DB_URL,
     url: process.env.DB_URL,
     authToken: process.env.DB_TOKEN,
     host: process.env.DB_HOST,
@@ -13,4 +14,4 @@ export default defineConfig({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
   },
-});
+}); 
