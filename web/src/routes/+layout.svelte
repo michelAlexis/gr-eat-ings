@@ -38,8 +38,8 @@
                         <a
                             href={item.href}
                             class:font-bold={$page.url.pathname === item.href}
-                            class="hover:bg-primary-500/10 p-2 rounded-md hover:text-primary-300"
-                            >
+                            class="hover:variant-soft-primary p-2 rounded-md"
+                        >
                             {item.label}
                         </a>
                     {/each}

@@ -2,13 +2,14 @@ import type { CustomThemeConfig } from '@skeletonlabs/tw-plugin';
 
 export const yummy: CustomThemeConfig = {
     name: 'yummy',
+
     properties: {
         // =~= Theme Properties =~=
         '--theme-font-family-base': `system-ui`,
         '--theme-font-family-heading': `system-ui`,
         '--theme-font-color-base': '0 0 0',
         '--theme-font-color-dark': '255 255 255',
-        '--theme-rounded-base': '16px',
+        '--theme-rounded-base': '10px',
         '--theme-rounded-container': '6px',
         '--theme-border-base': '1px',
         // =~= Theme On-X Colors =~=
