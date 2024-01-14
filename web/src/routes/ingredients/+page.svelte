@@ -3,15 +3,14 @@
 
     export let data: PageData;
 
-    $: ({ingredients} = data);
+    $: ({ ingredients } = data);
 </script>
 
-<div>
+<div class="container h-full mx-auto">
     <h1>Ingredient list</h1>
-    {#each ingredients ?? [] as ingredient}
-        <div>
-            <div>{ingredient.id}</div>
-            <div>{ingredient.name}</div>
-        </div>
-    {/each}
+    <div>
+        {#each ingredients as ingredient}
+            <div>{ingredient.id} - {ingredient.name}</div>
+        {/each}
+    </div>
 </div>

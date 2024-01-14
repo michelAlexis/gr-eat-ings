@@ -11,13 +11,13 @@ const createIngredientSchema = z.object({
     refUnit: z.enum(['gr', 'ml']).default('gr'),
     refQuantity: z.number().int().positive().default(100),
     kcal: z.number().int().positive().default(0),
-    fat: z.number().positive().nullable(),
-    fatSaturated: z.number().positive().nullable(),
-    carbs: z.number().positive().nullable(),
-    sugar: z.number().positive().nullable(),
-    fiber: z.number().positive().nullable(),
-    protein: z.number().positive().nullable(),
-    salt: z.number().positive().nullable(),
+    fat: z.number().nonnegative().nullable(),
+    fatSaturated: z.number().nonnegative().nullable(),
+    carbs: z.number().nonnegative().nullable(),
+    sugar: z.number().nonnegative().nullable(),
+    fiber: z.number().nonnegative().nullable(),
+    protein: z.number().nonnegative().nullable(),
+    salt: z.number().nonnegative().nullable(),
 });
 
 export const load: PageServerLoad = async (event) => {
