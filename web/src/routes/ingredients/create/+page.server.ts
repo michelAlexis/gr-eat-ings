@@ -5,6 +5,12 @@ import { db } from '$lib/server/db';
 import { ingredients } from '$lib/server/schema';
 import { superValidate } from 'sveltekit-superforms/server';
 
+const servingSchema = z.object({
+    label: z.string().min(1).max(50).trim(),
+    refQuantity: z.number().int().positive().default(1),
+    isDefault: z.boolean()
+});
+
 const createIngredientSchema = z.object({
     name: z.string().min(5).max(100).trim(),
     description: z.string().max(1000).trim().default(''),
@@ -18,6 +24,9 @@ const createIngredientSchema = z.object({
     fiber: z.number().nonnegative().nullable(),
     protein: z.number().nonnegative().nullable(),
     salt: z.number().nonnegative().nullable(),
+
+    // Servings info
+    servings: z.array(servingSchema).nonempty(),
 });
 
 export const load: PageServerLoad = async (event) => {

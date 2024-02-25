@@ -10,7 +10,14 @@
     <h1>Ingredient list</h1>
     <div>
         {#each ingredients as ingredient}
-            <div>{ingredient.id} - {ingredient.name}</div>
+            <article>
+                <div>
+                    {ingredient.id} - {ingredient.name}
+                    <form action="?/deleteIngredient&id={ingredient.id}" method="post">
+                        <button class="btn" type="submit">Delete</button>
+                    </form>
+                </div>
+            </article>
         {/each}
     </div>
 </div>
