@@ -8,7 +8,7 @@ import { superValidate } from 'sveltekit-superforms/server';
 const servingSchema = z.object({
     label: z.string().min(1).max(50).trim(),
     refQuantity: z.number().int().positive().default(1),
-    isDefault: z.boolean()
+    isDefault: z.boolean(),
 });
 
 const createIngredientSchema = z.object({

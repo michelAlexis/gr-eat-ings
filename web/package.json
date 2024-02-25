@@ -14,7 +14,8 @@
     "test:integration": "playwright test",
     "test:unit": "vitest",
     "db:diff": "drizzle-kit generate:mysql",
-    "db:migrate": "bun ./src/scripts/db-migrate.ts"
+    "db:migrate": "bun ./src/scripts/db-migrate.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1",
@@ -30,7 +31,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "10.4.16",
-    "drizzle-kit": "^0.20.8",
+    "drizzle-kit": "latest",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-svelte": "^2.30.0",
