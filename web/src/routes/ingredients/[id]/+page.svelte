@@ -5,7 +5,7 @@
     const { ingredient } = data;
 </script>
 
-<h1>Detail Page</h1>
+<h1 class="h1">{ingredient.name}</h1>
 
 <div>
     <pre>{JSON.stringify(ingredient, null, 2)}</pre>
