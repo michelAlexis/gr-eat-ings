@@ -2,12 +2,12 @@ import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 import { fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { ingredients } from '$lib/server/schema';
+import { ingredients, servings } from '$lib/server/schema';
 import { superValidate } from 'sveltekit-superforms/server';
 
 const servingSchema = z.object({
     label: z.string().min(1).max(50).trim(),
-    refQuantity: z.number().int().positive().default(1),
+    quantity: z.number().int().positive().default(1),
     isDefault: z.boolean(),
 });
 
@@ -47,6 +47,12 @@ export const actions: Actions = {
 
         const created = await db.insert(ingredients).values(form.data).execute();
         console.log('Created ingredient', created.insertId);
+        if(form.data.servings) {
+            for (const serving of form.data.servings) {
+                console.log('Creating serving', serving);
+                await db.insert(servings).values({...serving, ingredientId: +created.insertId}).execute();
+            }
+        }
         return { form };
     },
 };

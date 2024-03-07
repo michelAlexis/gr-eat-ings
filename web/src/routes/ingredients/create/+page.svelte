@@ -2,7 +2,6 @@
     import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
     import type { PageData } from './$types';
     import { superForm } from 'sveltekit-superforms/client';
-    import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
     export let data: PageData;
 
@@ -16,24 +15,13 @@
         },
     });
 
-    $: if (fields.servings.value) {
-        form.update((_form) => {
-            _form.servings.push({
-                label: _form.refUnit,
-                isDefault: true,
-                refQuantity: 1,
-            });
-
-            return _form;
-        });
-    }
 
     function addServing() {
         fields.servings.value.update((servings) => {
             servings.push({
                 label: '',
                 isDefault: false,
-                refQuantity: 0,
+                quantity: 0,
             });
 
             return servings;
@@ -73,18 +61,6 @@
 
 <div class="container h-full mx-auto p-2 pb-4">
     <form action="?/createIngredient" method="post" use:enhance class="flex flex-col gap-3">
-        <!-- <div> -->
-        <!--     <input -->
-        <!--         type="text" -->
-        <!--         name="name" -->
-        <!--         class="input rounded-container-token text-4xl" -->
-        <!--         placeholder="Ingredient name" -->
-        <!--         bind:value={$form.name} -->
-        <!--     /> -->
-        <!--     {#if $errors.name} -->
-        <!--         <p class="text-error-500">{$errors.name}</p> -->
-        <!--     {/if} -->
-        <!-- </div> -->
         <!-- Name -->
         <div class="card">
             <section class="p-4">
@@ -349,7 +325,9 @@
                     </div>
                     <div class="col-span-3">
                         <div class="flex justify-end mt-2">
-                            <span class="mr-11">Default</span>
+                            {#if $form.servings.length}
+                            <span class="mr-11">Default</span>     
+                            {/if}
                         </div>
                         {#each $form.servings as _, i}
                             <div class="flex items-center gap-3 mb-2">
@@ -362,7 +340,7 @@
                                 <input
                                     type="number"
                                     class="input"
-                                    bind:value={$form.servings[i].refQuantity} />
+                                    bind:value={$form.servings[i].quantity} />
                                 <span class="w-4">{$form.refUnit}</span>
                                 <input
                                     type="checkbox"
@@ -378,8 +356,8 @@
                             {#if $errors.servings?.[i].label}
                                 <div class="text-error-500">{$errors.servings?.[i].label}</div>
                             {/if}
-                            {#if $errors.servings?.[i].refQuantity}
-                                <div class="text-error-500">{$errors.servings?.[i].refQuantity}</div>
+                            {#if $errors.servings?.[i].quantity}
+                                <div class="text-error-500">{$errors.servings?.[i].quantity}</div>
                             {/if}
                         {/each}
                         {#if $errors.servings?._errors}
