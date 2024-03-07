@@ -46,10 +46,8 @@ export const actions: Actions = {
         }
 
         const created = await db.insert(ingredients).values(form.data).execute();
-        console.log('Created ingredient', created.insertId);
         if(form.data.servings) {
             for (const serving of form.data.servings) {
-                console.log('Creating serving', serving);
                 await db.insert(servings).values({...serving, ingredientId: +created.insertId}).execute();
             }
         }

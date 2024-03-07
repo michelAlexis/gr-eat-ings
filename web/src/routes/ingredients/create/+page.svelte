@@ -15,7 +15,6 @@
         },
     });
 
-
     function addServing() {
         fields.servings.value.update((servings) => {
             servings.push({
@@ -326,7 +325,7 @@
                     <div class="col-span-3">
                         <div class="flex justify-end mt-2">
                             {#if $form.servings.length}
-                            <span class="mr-11">Default</span>     
+                                <span class="mr-11">Default</span>
                             {/if}
                         </div>
                         {#each $form.servings as _, i}
