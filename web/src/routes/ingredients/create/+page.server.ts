@@ -45,11 +45,22 @@ export const actions: Actions = {
             return fail(400, { form });
         }
 
-        const created = await db.insert(ingredients).values(form.data).execute();
-        if(form.data.servings) {
-            for (const serving of form.data.servings) {
-                await db.insert(servings).values({...serving, ingredientId: +created.insertId}).execute();
-            }
+        const created = await db
+            .insert(ingredients)
+            .values(form.data)
+            .returning({ ingredientId: ingredients.id });
+        console.log('Created ingredient');
+        console.log(created);
+        if (form.data.servings) {
+            await db
+                .insert(servings)
+                .values(
+                    form.data.servings.map((serving) => ({
+                        ...serving,
+                        ingredientId: created[0].ingredientId,
+                    })),
+                )
+                .execute();
         }
         return { form };
     },

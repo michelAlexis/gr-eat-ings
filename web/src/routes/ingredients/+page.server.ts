@@ -3,7 +3,7 @@ import { ingredients } from '$lib/server/schema';
 import { getPageParams } from '$lib/utils/page.utils';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { eq } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 
 export const load: PageServerLoad = async ({ url }) => {
     const { first, size } = getPageParams(url, { maxSize: 20 });
@@ -15,12 +15,14 @@ export const load: PageServerLoad = async ({ url }) => {
         .from(ingredients)
         .limit(size)
         .offset(first);
+    const [{ totalElements }] = await db.select({ totalElements: count() }).from(ingredients);
     return {
         ingredients: await ingredientsPage,
+        totalElements,
     };
 };
 
-export const actions: Actions = {
+export const actions = {
     deleteIngredient: async ({ url }) => {
         const id = Number(url.searchParams.get('id'));
         if (!id || isNaN(id)) {
@@ -29,7 +31,7 @@ export const actions: Actions = {
         try {
             console.log('Deleting ingredient with id', id);
             await db.delete(ingredients).where(eq(ingredients.id, id));
-            console.log('Deleted successfully');
+            console.log('Deleted ingredient');
         } catch (err) {
             console.error(err);
             return fail(500, { message: 'Error while deleting ingredient' });
@@ -37,4 +39,4 @@ export const actions: Actions = {
 
         return { status: 200 };
     },
-};
+} satisfies Actions;

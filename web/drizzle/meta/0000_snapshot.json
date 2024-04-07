@@ -1,125 +1,165 @@
 {
-  "version": "5",
-  "dialect": "mysql",
-  "id": "9469506a-ea2a-47e1-9985-33799f35fc83",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "tables": {
-    "ingredients": {
-      "name": "ingredients",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": true
+    "id": "a5cc19d7-6e90-466c-8a13-c8124dbbf771",
+    "prevId": "00000000-0000-0000-0000-000000000000",
+    "version": "5",
+    "dialect": "pg",
+    "tables": {
+        "ingredients": {
+            "name": "ingredients",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "name": {
+                    "name": "name",
+                    "type": "varchar(100)",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "description": {
+                    "name": "description",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "default": "''"
+                },
+                "ref_unit": {
+                    "name": "ref_unit",
+                    "type": "ingredient_unit",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "ref_quantity": {
+                    "name": "ref_quantity",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": 100
+                },
+                "kcal": {
+                    "name": "kcal",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": 0
+                },
+                "fat": {
+                    "name": "fat",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "fat_saturated": {
+                    "name": "fat_saturated",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "carbs": {
+                    "name": "carbs",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "sugar": {
+                    "name": "sugar",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "fiber": {
+                    "name": "fiber",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "protein": {
+                    "name": "protein",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "salt": {
+                    "name": "salt",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar(1000)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "''"
-        },
-        "ref_unit": {
-          "name": "ref_unit",
-          "type": "enum('gr','ml')",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'gr'"
-        },
-        "ref_quantity": {
-          "name": "ref_quantity",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 100
-        },
-        "kcal": {
-          "name": "kcal",
-          "type": "int",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 0
-        },
-        "fat": {
-          "name": "fat",
-          "type": "float",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "fat_saturated": {
-          "name": "fat_saturated",
-          "type": "float",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "carbs": {
-          "name": "carbs",
-          "type": "float",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "sugar": {
-          "name": "sugar",
-          "type": "float",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "fiber": {
-          "name": "fiber",
-          "type": "float",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "protein": {
-          "name": "protein",
-          "type": "float",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "salt": {
-          "name": "salt",
-          "type": "float",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+        "servings": {
+            "name": "servings",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "label": {
+                    "name": "label",
+                    "type": "varchar(50)",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "quantity": {
+                    "name": "quantity",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "is_default": {
+                    "name": "is_default",
+                    "type": "boolean",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "default": false
+                },
+                "ingredient_id": {
+                    "name": "ingredient_id",
+                    "type": "serial",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "servings_ingredient_id_ingredients_id_fk": {
+                    "name": "servings_ingredient_id_ingredients_id_fk",
+                    "tableFrom": "servings",
+                    "tableTo": "ingredients",
+                    "columnsFrom": ["ingredient_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
         }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {
-        "ingredients_id": {
-          "name": "ingredients_id",
-          "columns": [
-            "id"
-          ]
+    },
+    "enums": {
+        "ingredient_unit": {
+            "name": "ingredient_unit",
+            "values": {
+                "gr": "gr",
+                "ml": "ml"
+            }
         }
-      },
-      "uniqueConstraints": {}
-    }
-  },
-  "schemas": {},
-  "_meta": {
+    },
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  }
+    "_meta": {
+        "columns": {},
+        "schemas": {},
+        "tables": {}
+    }
 }

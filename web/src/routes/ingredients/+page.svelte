@@ -3,21 +3,24 @@
 
     export let data: PageData;
 
-    $: ({ ingredients } = data);
+    $: ({ ingredients, totalElements } = data);
 </script>
 
-<div class="container h-full mx-auto">
-    <h1>Ingredient list</h1>
-    <div>
-        {#each ingredients as ingredient}
-            <article>
-                <div>
-                    {ingredient.id} - {ingredient.name}
-                    <form action="?/deleteIngredient&id={ingredient.id}" method="post">
-                        <button class="btn" type="submit">Delete</button>
-                    </form>
-                </div>
-            </article>
-        {/each}
+<div class="container h-full mx-auto mt-4">
+    <div class="card">
+        <header class="h1 card-header">Ingredient list</header>
+        <section class="p-4">
+            <div>Total elements: {totalElements}</div>
+            {#each ingredients as ingredient}
+                <article>
+                    <div class="flex items-center gap-2">
+                        {ingredient.id} - {ingredient.name}
+                        <form action="?/deleteIngredient&id={ingredient.id}" method="post">
+                            <button class="btn btn-sm variant-filled" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </article>
+            {/each}
+        </section>
     </div>
 </div>

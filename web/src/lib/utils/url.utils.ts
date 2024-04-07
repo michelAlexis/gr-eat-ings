@@ -12,4 +12,3 @@ export function getSearchParam(
     const value = url.searchParams.get(paramName);
     return value === null ? defaultValue : value;
 }
-

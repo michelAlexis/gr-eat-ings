@@ -1,4 +1,8 @@
 <!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
+<script lang="ts">
+    export let data;
+    $: console.log('Session', data.session);
+</script>
 
 <div class="container h-full mx-auto flex justify-center items-center">
     <div class="space-y-10 text-center flex flex-col items-center">
@@ -9,8 +13,7 @@
                 class="btn variant-filled"
                 href="https://skeleton.dev/"
                 target="_blank"
-                rel="noreferrer"
-            >
+                rel="noreferrer">
                 Launch Documentation
             </a>
         </div>
@@ -22,4 +25,3 @@
         </div>
     </div>
 </div>
-
