@@ -1,7 +1,4 @@
-<!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
 <script lang="ts">
-    export let data;
-    $: console.log('Session', data.session);
 </script>
 
 <div class="container h-full mx-auto flex justify-center items-center">

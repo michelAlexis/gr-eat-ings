@@ -6,7 +6,7 @@
     $: ({ ingredients, totalElements } = data);
 </script>
 
-<div class="container h-full mx-auto mt-4">
+<div class="container mx-auto mt-4">
     <div class="card">
         <header class="h1 card-header">Ingredient list</header>
         <section class="p-4">

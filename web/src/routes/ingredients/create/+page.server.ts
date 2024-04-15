@@ -16,7 +16,7 @@ const createIngredientSchema = z.object({
     description: z.string().max(1000).trim().default(''),
     refUnit: z.enum(['gr', 'ml']).default('gr'),
     refQuantity: z.number().int().positive().default(100),
-    kcal: z.number().int().positive().default(0),
+    kcal: z.number().int().nonnegative().default(0),
     fat: z.number().nonnegative().nullable(),
     fatSaturated: z.number().nonnegative().nullable(),
     carbs: z.number().nonnegative().nullable(),
@@ -26,7 +26,7 @@ const createIngredientSchema = z.object({
     salt: z.number().nonnegative().nullable(),
 
     // Servings info
-    servings: z.array(servingSchema).nonempty(),
+    servings: z.array(servingSchema),
 });
 
 export const load: PageServerLoad = async (event) => {
