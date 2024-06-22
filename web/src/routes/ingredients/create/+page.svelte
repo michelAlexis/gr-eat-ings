@@ -160,6 +160,7 @@
                                                     class="input-group input-group-divider grid-cols-[auto_4rem]">
                                                     <input
                                                         type="number"
+                                                        step={0.1}
                                                         class="input rounded-r-none"
                                                         name="kcal"
                                                         bind:value={$form.kcal} />
@@ -180,6 +181,7 @@
                                                     class="input-group input-group-divider grid-cols-[auto_4rem]">
                                                     <input
                                                         type="number"
+                                                        step={0.1}
                                                         class="input rounded-r-none"
                                                         name="fat"
                                                         bind:value={$form.fat} />
@@ -199,6 +201,7 @@
                                                     class="input-group input-group-divider grid-cols-[auto_4rem]">
                                                     <input
                                                         type="number"
+                                                        step={0.1}
                                                         class="input rounded-r-none"
                                                         name="fatSaturated"
                                                         bind:value={$form.fatSaturated} />
@@ -218,6 +221,7 @@
                                                     class="input-group input-group-divider grid-cols-[auto_4rem]">
                                                     <input
                                                         type="number"
+                                                        step={0.1}
                                                         class="input rounded-r-none"
                                                         name="carbs"
                                                         bind:value={$form.carbs} />
@@ -237,6 +241,7 @@
                                                     class="input-group input-group-divider grid-cols-[auto_4rem]">
                                                     <input
                                                         type="number"
+                                                        step={0.1}
                                                         class="input rounded-r-none"
                                                         name="sugar"
                                                         bind:value={$form.sugar} />
@@ -256,6 +261,7 @@
                                                     class="input-group input-group-divider grid-cols-[auto_4rem]">
                                                     <input
                                                         type="number"
+                                                        step={0.1}
                                                         class="input rounded-r-none"
                                                         name="fiber"
                                                         bind:value={$form.fiber} />
@@ -275,6 +281,7 @@
                                                     class="input-group input-group-divider grid-cols-[auto_4rem]">
                                                     <input
                                                         type="number"
+                                                        step={0.1}
                                                         class="input rounded-r-none"
                                                         name="protein"
                                                         bind:value={$form.protein} />
@@ -296,7 +303,7 @@
                                                         type="number"
                                                         class="input rounded-r-none"
                                                         name="salt"
-                                                        step="0.01"
+                                                        step={0.01}
                                                         bind:value={$form.salt} />
                                                     <div class="text-center">gr</div>
                                                 </label>
@@ -338,6 +345,7 @@
                                 <span>=</span>
                                 <input
                                     type="number"
+                                    step={0.1}
                                     class="input"
                                     bind:value={$form.servings[i].quantity} />
                                 <span class="w-4">{$form.refUnit}</span>

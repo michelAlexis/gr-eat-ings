@@ -2,11 +2,21 @@
     import { Auth } from '@supabase/auth-ui-svelte';
     import type { PageData } from './$types';
     import { ThemeSupa } from '@supabase/auth-ui-shared';
+    import { onMount } from 'svelte';
 
     export let data: PageData;
 
     const { supabase, url } = data;
-    console.log('Auth url', url);
+    // Invalid session on load.
+    onMount(() => {
+        const { data } = supabase.auth.onAuthStateChange((_, _session) => {
+            if (_session) {
+                window.location.reload();
+            }
+        });
+
+        return () => data.subscription.unsubscribe();
+    });
 </script>
 
 <svelte:head>

@@ -6,9 +6,11 @@
     import { storePopup } from '@skeletonlabs/skeleton';
     import { invalidate } from '$app/navigation';
     import { onMount } from 'svelte';
+    import type { PageData } from './$types';
 
-    export let data;
-    const { supabase, session, user } = data;
+    export let data: PageData;
+    let { supabase, session, user } = data;
+    $: ({ supabase, session, user } = data);
     const initials = 'AM';
 
     // Invalid session on load.
@@ -64,7 +66,17 @@
             </svelte:fragment>
 
             <svelte:fragment slot="trail">
-                <Avatar {initials} width="w-10"/>
+                {#if user}
+                    <a href="/account">
+                        <Avatar
+                            {initials}
+                            width="w-10"
+                            cursor="cursor-pointer"
+                            border="border-4 border-surface-300-600-token hover:!border-primary-500" />
+                    </a>
+                {:else}
+                    <a href="/auth">Login</a>
+                {/if}
             </svelte:fragment>
         </AppBar>
     </svelte:fragment>

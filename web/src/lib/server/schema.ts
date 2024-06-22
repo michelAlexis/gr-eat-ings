@@ -27,6 +27,7 @@ export const ingredients = pgTable('ingredients', {
 });
 export type Ingredient = typeof ingredients.$inferSelect;
 export type NewIngredient = typeof ingredients.$inferInsert;
+export type IngredientUnit = Ingredient['refUnit'];
 
 export const servings = pgTable('servings', {
     id: serial('id').primaryKey(),
@@ -50,3 +51,12 @@ export const servingsRelations = relations(servings, ({ one }) => ({
 export const ingredientsRelations = relations(ingredients, ({ many }) => ({
     servings: many(servings),
 }));
+
+export interface RecipeIngredient {
+    ingredient: Ingredient;
+    quantity: number;
+    unit: IngredientUnit; 
+}
+export interface Recipe {
+    ingredients: RecipeIngredient[];
+}

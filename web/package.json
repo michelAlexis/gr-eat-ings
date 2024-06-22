@@ -52,6 +52,7 @@
   "type": "module",
   "dependencies": {
     "@floating-ui/dom": "1.5.3",
+    "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/ssr": "0.1.0",
     "drizzle-orm": "^0.30.7",
     "postgres": "3.4.4",

@@ -14,7 +14,9 @@
             {#each ingredients as ingredient}
                 <article>
                     <div class="flex items-center gap-2">
-                        {ingredient.id} - {ingredient.name}
+                        <a href={`/ingredients/${ingredient.id}`}>
+                            {ingredient.id} - {ingredient.name}
+                        </a>
                         <form action="?/deleteIngredient&id={ingredient.id}" method="post">
                             <button class="btn btn-sm variant-filled" type="submit">Delete</button>
                         </form>
