@@ -4,6 +4,7 @@ import { fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { ingredients, servings } from '$lib/server/schema';
 import { superValidate } from 'sveltekit-superforms/server';
+import { zod } from 'sveltekit-superforms/adapters';
 
 const servingSchema = z.object({
     label: z.string().min(1).max(50).trim(),
@@ -30,7 +31,7 @@ const createIngredientSchema = z.object({
 });
 
 export const load: PageServerLoad = async (event) => {
-    const form = await superValidate(event, createIngredientSchema);
+    const form = await superValidate(event, zod(createIngredientSchema));
 
     // Unless you throw, always return { form } in load and form actions.
     return { form };
@@ -38,7 +39,7 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
     createIngredient: async ({ request }) => {
-        const form = await superValidate(request, createIngredientSchema);
+        const form = await superValidate(request, zod(createIngredientSchema));
 
         if (!form.valid) {
             // Again, return { form } and things will just work.

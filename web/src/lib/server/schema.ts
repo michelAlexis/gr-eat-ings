@@ -55,7 +55,7 @@ export const ingredientsRelations = relations(ingredients, ({ many }) => ({
 export interface RecipeIngredient {
     ingredient: Ingredient;
     quantity: number;
-    unit: IngredientUnit; 
+    unit: IngredientUnit;
 }
 export interface Recipe {
     ingredients: RecipeIngredient[];
