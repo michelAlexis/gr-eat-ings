@@ -9,8 +9,10 @@
     "test": "npm run test:integration && npm run test:unit",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --check . && eslint .",
-    "format": "prettier --write .",
+    "p:lint": "prettier --check . && eslint .",
+    "p:format": "prettier --write .",
+    "lint": "bunx @biomejs/biome lint",
+    "format": "bunx @biomejs/biome format",
     "test:integration": "playwright test",
     "test:unit": "vitest",
     "db:diff": "drizzle-kit generate:pg",
@@ -18,6 +20,7 @@
     "db:studio": "bun drizzle-kit studio"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.2",
     "@playwright/test": "^1.28.1",
     "@skeletonlabs/skeleton": "2.5.1",
     "@skeletonlabs/tw-plugin": "0.2.4",
