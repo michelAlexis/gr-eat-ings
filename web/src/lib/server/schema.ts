@@ -1,13 +1,13 @@
 import { relations } from 'drizzle-orm';
 import {
-    integer,
-    real,
-    varchar,
-    pgTable,
-    serial,
-    pgEnum,
-    text,
     boolean,
+    integer,
+    pgEnum,
+    pgTable,
+    real,
+    serial,
+    text,
+    varchar,
 } from 'drizzle-orm/pg-core';
 export const ingredientUnitColumn = pgEnum('ingredient_unit', ['gr', 'ml']);
 export const ingredients = pgTable('ingredients', {

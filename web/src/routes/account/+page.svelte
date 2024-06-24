@@ -1,34 +1,34 @@
 <script lang="ts">
-    import { enhance } from '$app/forms';
-    import type { SubmitFunction } from '@sveltejs/kit';
-    import type { PageData } from './$types.js';
+import { enhance } from '$app/forms';
+import type { SubmitFunction } from '@sveltejs/kit';
+import type { PageData } from './$types.js';
 
-    export let data: PageData;
-    export let form;
+export let data: PageData;
+export let form;
 
-    let { user, profile } = data;
-    $: ({ user, profile } = data);
+let { user, profile } = data;
+$: ({ user, profile } = data);
 
-    let loading = false;
-    let fullName: string = profile?.full_name ?? '';
-    let username: string = profile?.username ?? '';
-    let website: string = profile?.website ?? '';
-    let avatarUrl: string = profile?.avatar_url ?? '';
+let loading = false;
+let fullName: string = profile?.full_name ?? '';
+let username: string = profile?.username ?? '';
+let website: string = profile?.website ?? '';
+let avatarUrl: string = profile?.avatar_url ?? '';
 
-    const handleSubmit: SubmitFunction = () => {
-        loading = true;
-        return async () => {
-            loading = false;
-        };
+const handleSubmit: SubmitFunction = () => {
+    loading = true;
+    return async () => {
+        loading = false;
     };
+};
 
-    const handleSignOut: SubmitFunction = () => {
-        loading = true;
-        return async ({ update }) => {
-            loading = false;
-            update();
-        };
+const handleSignOut: SubmitFunction = () => {
+    loading = true;
+    return async ({ update }) => {
+        loading = false;
+        update();
     };
+};
 </script>
 
 <svelte:head>

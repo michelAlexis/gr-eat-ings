@@ -1,9 +1,9 @@
 import { db } from '$lib/server/db';
 import { ingredients } from '$lib/server/schema';
-import { eq } from 'drizzle-orm';
-import type { PageServerLoad } from './$types';
-import { number as zNumber } from 'zod';
 import { error } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
+import { number as zNumber } from 'zod';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
     const id = zNumber().parse(+params.id);

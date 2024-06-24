@@ -1,43 +1,43 @@
 <script lang="ts">
-    import '../app.postcss';
-    import { AppShell, AppBar, Avatar } from '@skeletonlabs/skeleton';
-    import { page } from '$app/stores';
-    import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-    import { storePopup } from '@skeletonlabs/skeleton';
-    import { invalidate } from '$app/navigation';
-    import { onMount } from 'svelte';
-    import type { PageData } from './$types';
+import '../app.postcss';
+import { invalidate } from '$app/navigation';
+import { page } from '$app/stores';
+import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { AppBar, AppShell, Avatar } from '@skeletonlabs/skeleton';
+import { storePopup } from '@skeletonlabs/skeleton';
+import { onMount } from 'svelte';
+import type { PageData } from './$types';
 
-    export let data: PageData;
-    let { supabase, session, user } = data;
-    $: ({ supabase, session, user } = data);
-    const initials = 'AM';
+export let data: PageData;
+let { supabase, session, user } = data;
+$: ({ supabase, session, user } = data);
+const initials = 'AM';
 
-    // Invalid session on load.
-    // Copy from doc: https://supabase.com/docs/guides/getting-started/tutorials/with-sveltekit#creating-a-supabase-client-for-ssr
-    onMount(() => {
-        const { data } = supabase.auth.onAuthStateChange((_, _session) => {
-            if (_session?.expires_at !== session?.expires_at) {
-                invalidate('supabase:auth');
-            }
-        });
-
-        return () => data.subscription.unsubscribe();
+// Invalid session on load.
+// Copy from doc: https://supabase.com/docs/guides/getting-started/tutorials/with-sveltekit#creating-a-supabase-client-for-ssr
+onMount(() => {
+    const { data } = supabase.auth.onAuthStateChange((_, _session) => {
+        if (_session?.expires_at !== session?.expires_at) {
+            invalidate('supabase:auth');
+        }
     });
 
-    // Floating UI for Popups
-    storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+    return () => data.subscription.unsubscribe();
+});
 
-    const menu = [
-        {
-            href: '/ingredients',
-            label: 'Ingredients',
-        },
-        {
-            href: '/ingredients/create',
-            label: 'Create Ingredient',
-        },
-    ];
+// Floating UI for Popups
+storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
+const menu = [
+    {
+        href: '/ingredients',
+        label: 'Ingredients',
+    },
+    {
+        href: '/ingredients/create',
+        label: 'Create Ingredient',
+    },
+];
 </script>
 
 <!-- App Shell -->

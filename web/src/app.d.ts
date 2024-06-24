@@ -1,4 +1,4 @@
-import type { SupabaseClient, Session, User } from '@supabase/ssr';
+import type { Session, SupabaseClient, User } from '@supabase/ssr';
 
 declare global {
     namespace App {

@@ -1,10 +1,10 @@
-import { z } from 'zod';
-import type { Actions, PageServerLoad } from './$types';
-import { fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { ingredients, servings } from '$lib/server/schema';
-import { superValidate } from 'sveltekit-superforms/server';
+import { fail } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
+import { superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
+import type { Actions, PageServerLoad } from './$types';
 
 const servingSchema = z.object({
     label: z.string().min(1).max(50).trim(),

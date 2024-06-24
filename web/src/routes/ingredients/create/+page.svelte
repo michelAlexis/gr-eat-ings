@@ -1,64 +1,64 @@
 <script lang="ts">
-    import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
-    import type { PageData } from './$types';
-    import { superForm } from 'sveltekit-superforms/client';
-    import { formFieldProxy, arrayProxy } from 'sveltekit-superforms';
+import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
+import { arrayProxy, formFieldProxy } from 'sveltekit-superforms';
+import { superForm } from 'sveltekit-superforms/client';
+import type { PageData } from './$types';
 
-    export let data: PageData;
+export let data: PageData;
 
-    const superform = superForm(data.form, {
-        dataType: 'json',
-        onUpdated: ({ form }) => {
-            if (form.valid) {
-                console.log('Form updated', form);
-                reset();
-            }
-        },
+const superform = superForm(data.form, {
+    dataType: 'json',
+    onUpdated: ({ form }) => {
+        if (form.valid) {
+            console.log('Form updated', form);
+            reset();
+        }
+    },
+});
+const { form, errors, enhance, reset } = superform;
+const { values: servings, valueErrors: servingsErrors } = arrayProxy(superform, 'servings');
+
+function addServing() {
+    servings.update((servings) => {
+        servings.push({
+            label: '',
+            isDefault: false,
+            quantity: 0,
+        });
+
+        return servings;
     });
-    const { form, errors, enhance, reset } = superform;
-    const { values: servings, valueErrors: servingsErrors } = arrayProxy(superform, 'servings');
+}
 
-    function addServing() {
-        servings.update((servings) => {
-            servings.push({
-                label: '',
-                isDefault: false,
-                quantity: 0,
-            });
-
+function removeServing(index: number) {
+    servings.update((servings) => {
+        if (index < 0 || index > servings.length - 1) {
             return servings;
-        });
-    }
+        }
+        const wasDefault = servings[index].isDefault;
+        servings.splice(index, 1);
 
-    function removeServing(index: number) {
-        servings.update((servings) => {
-            if (index < 0 || index > servings.length - 1) {
-                return servings;
-            }
-            const wasDefault = servings[index].isDefault;
-            servings.splice(index, 1);
+        if (wasDefault) {
+            servings[0].isDefault = true;
+        }
 
-            if (wasDefault) {
-                servings[0].isDefault = true;
-            }
+        return servings;
+    });
+}
 
+function makeServingDefault(index: number) {
+    servings.update((servings) => {
+        if (index < 0 || index > servings.length - 1) {
             return servings;
-        });
-    }
+        }
 
-    function makeServingDefault(index: number) {
-        servings.update((servings) => {
-            if (index < 0 || index > servings.length - 1) {
-                return servings;
-            }
+        for (let i = 0; i < servings.length; i++) {
+            servings[i].isDefault = i === index;
+        }
 
-            for (let i = 0; i < servings.length; i++) {
-                servings[i].isDefault = i === index;
-            }
-
-            return servings;
-        });
-    }
+        return servings;
+    });
+}
 </script>
 
 <div class="container h-full mx-auto p-2 pb-4">

@@ -1,4 +1,4 @@
-import { redirect, type RequestHandler } from '@sveltejs/kit';
+import { type RequestHandler, redirect } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
     console.warn('Callback from auth');

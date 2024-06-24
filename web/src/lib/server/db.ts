@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
 import { env } from '$env/dynamic/private';
+import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
 // create the connection

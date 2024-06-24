@@ -2,8 +2,8 @@ import { db } from '$lib/server/db';
 import { ingredients } from '$lib/server/schema';
 import { getPageParams } from '$lib/utils/page.utils';
 import { fail } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
 import { count, eq } from 'drizzle-orm';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url }) => {
     const { first, size } = getPageParams(url, { maxSize: 20 });
