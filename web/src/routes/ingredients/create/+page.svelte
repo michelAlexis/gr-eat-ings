@@ -2,10 +2,11 @@
     import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
     import type { PageData } from './$types';
     import { superForm } from 'sveltekit-superforms/client';
+    import { formFieldProxy, arrayProxy } from 'sveltekit-superforms';
 
     export let data: PageData;
 
-    const { form, errors, enhance, fields, reset } = superForm(data.form, {
+    const superform = superForm(data.form, {
         dataType: 'json',
         onUpdated: ({ form }) => {
             if (form.valid) {
@@ -14,9 +15,11 @@
             }
         },
     });
+    const { form, errors, enhance, reset } = superform;
+    const { values: servings, valueErrors: servingsErrors } = arrayProxy(superform, 'servings');
 
     function addServing() {
-        fields.servings.value.update((servings) => {
+        servings.update((servings) => {
             servings.push({
                 label: '',
                 isDefault: false,
@@ -28,7 +31,7 @@
     }
 
     function removeServing(index: number) {
-        fields.servings.value.update((servings) => {
+        servings.update((servings) => {
             if (index < 0 || index > servings.length - 1) {
                 return servings;
             }
@@ -44,7 +47,7 @@
     }
 
     function makeServingDefault(index: number) {
-        fields.servings.value.update((servings) => {
+        servings.update((servings) => {
             if (index < 0 || index > servings.length - 1) {
                 return servings;
             }
@@ -74,7 +77,7 @@
                             bind:value={$form.name}
                             placeholder="Ingredient name" />
                         {#if $errors.name}
-                            <p class="text-red-500">{$errors.name}</p>
+                            <p class="text-error-500">{$errors.name}</p>
                         {/if}
                     </div>
                 </div>
@@ -94,7 +97,7 @@
                             bind:value={$form.description}
                             placeholder="Yummy !" />
                         {#if $errors.description}
-                            <p class="text-red-500">{$errors.description}</p>
+                            <p class="text-error-500">{$errors.description}</p>
                         {/if}
                     </div>
                 </div>
@@ -331,40 +334,42 @@
                     </div>
                     <div class="col-span-3">
                         <div class="flex justify-end mt-2">
-                            {#if $form.servings.length}
-                                <span class="mr-11">Default</span>
+                            {#if $servings?.length}
+                                <span class="font-bold mr-11">Default</span>
                             {/if}
                         </div>
-                        {#each $form.servings as _, i}
+                        {#each $servings as serving, i}
                             <div class="flex items-center gap-3 mb-2">
                                 <input
                                     type="text"
                                     class="input"
                                     placeholder="Label"
-                                    bind:value={$form.servings[i].label} />
+                                    bind:value={serving.label} />
                                 <span>=</span>
-                                <input
-                                    type="number"
-                                    step={0.1}
-                                    class="input"
-                                    bind:value={$form.servings[i].quantity} />
-                                <span class="w-4">{$form.refUnit}</span>
+                                <label
+                                    class="input-group input-group-divider grid-cols-[auto_4rem]">
+                                    <input
+                                        type="number"
+                                        step={1}
+                                        class="input rounded-r-none"
+                                        bind:value={serving.quantity} />
+                                    <div class="text-center">{$form.refUnit}</div>
+                                </label>
                                 <input
                                     type="checkbox"
                                     class="checkbox"
-                                    bind:checked={$form.servings[i].isDefault}
+                                    bind:checked={serving.isDefault}
                                     on:change={(_) => makeServingDefault(i)} />
                                 <button
                                     type="button"
                                     class="btn variant-filled"
-                                    disabled={i === 0}
                                     on:click={(_) => removeServing(i)}>-</button>
                             </div>
-                            {#if $errors.servings?.[i].label}
-                                <div class="text-error-500">{$errors.servings?.[i].label}</div>
+                            {#if $servingsErrors?.[i]?.label}
+                                <div class="text-error-500">{$servingsErrors[i].label}</div>
                             {/if}
-                            {#if $errors.servings?.[i].quantity}
-                                <div class="text-error-500">{$errors.servings?.[i].quantity}</div>
+                            {#if $servingsErrors?.[i]?.quantity}
+                                <div class="text-error-500">{$servingsErrors[i].quantity}</div>
                             {/if}
                         {/each}
                         {#if $errors.servings?._errors}
