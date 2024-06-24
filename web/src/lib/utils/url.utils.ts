@@ -1,7 +1,7 @@
 export function getSearchParamNumber(url: URL, paramName: string, defaultValue: number): number {
     const value = url.searchParams.get(paramName);
     const asNumber = Number(value);
-    return value === null || isNaN(asNumber) ? defaultValue : asNumber;
+    return value === null || Number.isNaN(asNumber) ? defaultValue : asNumber;
 }
 
 export function getSearchParam(

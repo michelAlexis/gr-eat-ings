@@ -1,6 +1,6 @@
 <script lang="ts">
 import '../app.postcss';
-import { invalidate } from '$app/navigation';
+import { goto, invalidate } from '$app/navigation';
 import { page } from '$app/stores';
 import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { AppBar, AppShell, Avatar } from '@skeletonlabs/skeleton';
@@ -16,8 +16,17 @@ const initials = 'AM';
 // Invalid session on load.
 // Copy from doc: https://supabase.com/docs/guides/getting-started/tutorials/with-sveltekit#creating-a-supabase-client-for-ssr
 onMount(() => {
-    const { data } = supabase.auth.onAuthStateChange((_, _session) => {
-        if (_session?.expires_at !== session?.expires_at) {
+    const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+        if (!newSession) {
+            /**
+             * Queue this as a task so the navigation won't prevent the
+             * triggering function from completing
+             */
+            setTimeout(() => {
+                goto('/', { invalidateAll: true });
+            });
+        }
+        if (newSession?.expires_at !== session?.expires_at) {
             invalidate('supabase:auth');
         }
     });

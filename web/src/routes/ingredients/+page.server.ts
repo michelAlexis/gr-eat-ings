@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ url }) => {
 export const actions = {
     deleteIngredient: async ({ url }) => {
         const id = Number(url.searchParams.get('id'));
-        if (!id || isNaN(id)) {
+        if (!id || Number.isNaN(id)) {
             return fail(400, { message: 'No valid id provided' });
         }
         try {
