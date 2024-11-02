@@ -8,6 +8,7 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "format": "biome format --write",
     "test:unit": "vitest",
     "test": "npm run test:unit -- --run",
     "db:start": "docker compose up",
@@ -16,6 +17,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
