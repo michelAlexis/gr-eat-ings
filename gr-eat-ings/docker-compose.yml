@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres
+    container_name: gr-eat-ings-db
     restart: always
     ports:
       - 5432:5432

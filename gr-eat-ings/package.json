@@ -15,7 +15,7 @@
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "shadcn:add": "bunx shadcn-svelte@latest add"
+    "shadcn:add": "bunx shadcn-svelte@next add"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -27,7 +27,7 @@
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "autoprefixer": "^10.4.20",
-    "bits-ui": "^0.21.16",
+    "bits-ui": "^1.0.0-next.45",
     "clsx": "^2.1.1",
     "drizzle-kit": "^0.22.0",
     "lucide-svelte": "^0.454.0",

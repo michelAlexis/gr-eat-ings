@@ -3,9 +3,9 @@ import { page } from '$app/stores';
 import { cn } from '$lib/utils';
 import { fromStore } from 'svelte/store';
 import LogOut from 'lucide-svelte/icons/log-out';
-import { Button } from '../ui/button';
+import { buttonVariants } from '../ui/button';
 import { Separator } from '../ui/separator';
-import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
+import { Avatar, AvatarFallback } from '../ui/avatar';
 import {
     DropdownMenu,
     DropdownMenuTrigger,
@@ -61,17 +61,20 @@ const navItems = [
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>
-            <form method="post" action="?/logout" use:enhance class="flex items-center space-x-2">
-              <!-- <button> -->
-              <LogOut class="size-4" />
-              <span>Logout</span>
-              <!-- </button> -->
+            <form method="post" action="/demo/lucia?/logout" use:enhance>
+              <button class="flex items-center gap-2">
+                <LogOut class="size-4" />
+                <span>Logout</span>
+              </button>
             </form>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     {:else}
-      <Button variant="link" class="float-right">Login</Button>
+      <a
+        class={cn(buttonVariants({ variant: "link" }), "float-right")}
+        href="/demo/lucia">Login</a
+      >
     {/if}
   </div>
 </header>
