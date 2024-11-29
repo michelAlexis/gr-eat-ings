@@ -25,6 +25,7 @@ const pageState = fromStore(page);
 const navItems = [
     { label: 'Home', href: '/' },
     { label: 'Lucia demo', href: '/demo/lucia/login' },
+    { label: 'Create ingredient', href: '/ingredients/create' },
 ];
 </script>
 
