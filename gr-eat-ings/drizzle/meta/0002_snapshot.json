@@ -1,6 +1,6 @@
 {
-    "id": "22a44062-d389-4c01-a45c-e18d24f1a045",
-    "prevId": "00000000-0000-0000-0000-000000000000",
+    "id": "1c5229a9-4c4e-445c-9a5a-d6ebf4b93fa9",
+    "prevId": "096d22a5-9e17-48a1-bed9-9732708f7ca7",
     "version": "7",
     "dialect": "postgresql",
     "tables": {
@@ -97,6 +97,138 @@
             "compositePrimaryKeys": {},
             "uniqueConstraints": {}
         },
+        "public.recipe_ingredients": {
+            "name": "recipe_ingredients",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "recipe_id": {
+                    "name": "recipe_id",
+                    "type": "serial",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "ingredient_id": {
+                    "name": "ingredient_id",
+                    "type": "serial",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "quantity": {
+                    "name": "quantity",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "comment": {
+                    "name": "comment",
+                    "type": "varchar(200)",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "recipe_ingredients_recipe_id_recipes_id_fk": {
+                    "name": "recipe_ingredients_recipe_id_recipes_id_fk",
+                    "tableFrom": "recipe_ingredients",
+                    "tableTo": "recipes",
+                    "columnsFrom": ["recipe_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "recipe_ingredients_ingredient_id_ingredients_id_fk": {
+                    "name": "recipe_ingredients_ingredient_id_ingredients_id_fk",
+                    "tableFrom": "recipe_ingredients",
+                    "tableTo": "ingredients",
+                    "columnsFrom": ["ingredient_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        },
+        "public.recipe_steps": {
+            "name": "recipe_steps",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "order": {
+                    "name": "order",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "content": {
+                    "name": "content",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "''"
+                },
+                "recipe_id": {
+                    "name": "recipe_id",
+                    "type": "serial",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "recipe_steps_recipe_id_recipes_id_fk": {
+                    "name": "recipe_steps_recipe_id_recipes_id_fk",
+                    "tableFrom": "recipe_steps",
+                    "tableTo": "recipes",
+                    "columnsFrom": ["recipe_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        },
+        "public.recipes": {
+            "name": "recipes",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "label": {
+                    "name": "label",
+                    "type": "varchar(200)",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "ref_portions": {
+                    "name": "ref_portions",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        },
         "public.servings": {
             "name": "servings",
             "schema": "",
@@ -117,7 +249,8 @@
                     "name": "quantity",
                     "type": "integer",
                     "primaryKey": false,
-                    "notNull": true
+                    "notNull": true,
+                    "default": 1
                 },
                 "is_default": {
                     "name": "is_default",
@@ -195,12 +328,6 @@
                     "type": "text",
                     "primaryKey": true,
                     "notNull": true
-                },
-                "age": {
-                    "name": "age",
-                    "type": "integer",
-                    "primaryKey": false,
-                    "notNull": false
                 },
                 "username": {
                     "name": "username",
