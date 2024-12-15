@@ -7,7 +7,7 @@ export const createServingSchema = z.object({
 });
 
 export const createIngredientSchema = z.object({
-    name: z.string().min(5).max(100).trim(),
+    label: z.string().min(5).max(100).trim(),
     description: z.string().max(1000).trim().default(''),
     refUnit: z.enum(['gr', 'ml']).default('gr'),
     refQuantity: z.number().int().positive().default(100),

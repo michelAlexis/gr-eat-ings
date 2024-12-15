@@ -37,7 +37,7 @@ export const ingredients = pgTable(
     'ingredients',
     {
         id: serial('id').primaryKey(),
-        name: varchar('name', { length: 100 }).notNull(),
+        label: varchar('label', { length: 100 }).notNull(),
         description: text('description').default(''),
         refUnit: ingredientUnitColumn('ref_unit').notNull().default('gr'),
         refQuantity: integer('ref_quantity').notNull().default(100),
@@ -52,9 +52,9 @@ export const ingredients = pgTable(
     },
     (table) => {
         return {
-            nameIdx: index('idx_ingredients_name_unaccent').using(
+            labelIdx: index('idx_ingredients_label_unaccent').using(
                 'gin',
-                table.name.op('gin_trgm_ops'),
+                table.label.op('gin_trgm_ops'),
             ),
         };
     },

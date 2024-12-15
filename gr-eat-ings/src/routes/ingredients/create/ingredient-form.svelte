@@ -36,11 +36,11 @@ const formDataState = fromStore(formData);
 
 <Toaster richColors position="top-right" offset="60px" />
 <form method="POST" use:enhance>
-    <Form.Field {form} name="name">
+    <Form.Field {form} name="label">
         <Form.Control>
             {#snippet children({ props })}
                 <Form.Label>Name</Form.Label>
-                <Input {...props} bind:value={$formData.name} />
+                <Input {...props} bind:value={$formData.label} />
             {/snippet}
         </Form.Control>
         <Form.Description>

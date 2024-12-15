@@ -14,7 +14,7 @@ let { data }: Props = $props();
       <Table.Row>
         <Table.Head class="w-[40px]" />
         <Table.Head class="w-[100px]">Id</Table.Head>
-        <Table.Head>Name</Table.Head>
+        <Table.Head>Label</Table.Head>
         <Table.Head>kcal</Table.Head>
       </Table.Row>
     </Table.Header>
@@ -27,7 +27,7 @@ let { data }: Props = $props();
             </form>
           </Table.Cell>
           <Table.Cell>{ingredient.id}</Table.Cell>
-          <Table.Cell>{ingredient.name}</Table.Cell>
+          <Table.Cell>{ingredient.label}</Table.Cell>
           <Table.Cell>{ingredient.kcal}</Table.Cell>
         </Table.Row>
       {/each}

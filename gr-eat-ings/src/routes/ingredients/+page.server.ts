@@ -8,12 +8,12 @@ export const load: PageServerLoad = async () => {
     const data = await db
         .select({
             id: ingredients.id,
-            name: ingredients.name,
+            label: ingredients.label,
             kcal: ingredients.kcal,
         })
         .from(ingredients)
         .limit(100)
-        .orderBy(ingredients.name);
+        .orderBy(ingredients.label);
     return { ingredients: data };
 };
 

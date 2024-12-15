@@ -32,15 +32,15 @@ export const POST: RequestHandler = async ({ request, locals: { user } }) => {
     const results = await db
         .select({
             id: ingredients.id,
-            name: ingredients.name,
+            name: ingredients.label,
             kcal: ingredients.kcal,
         })
         .from(ingredients)
         .where(
             or(
-                likeIgnoreCase(ingredients.name, search.name),
+                likeIgnoreCase(ingredients.label, search.name),
                 fuzzySearchIngoreCase({
-                    column: ingredients.name,
+                    column: ingredients.label,
                     search: search.name,
                 }),
             ),
