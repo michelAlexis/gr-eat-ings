@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 import {
     boolean,
+    index,
     integer,
     pgEnum,
     pgTable,
@@ -32,21 +33,32 @@ export type Session = typeof session.$inferSelect;
 export type User = typeof user.$inferSelect;
 
 export const ingredientUnitColumn = pgEnum('ingredient_unit', ['gr', 'ml']);
-export const ingredients = pgTable('ingredients', {
-    id: serial('id').primaryKey(),
-    name: varchar('name', { length: 100 }).notNull(),
-    description: text('description').default(''),
-    refUnit: ingredientUnitColumn('ref_unit').notNull().default('gr'),
-    refQuantity: integer('ref_quantity').notNull().default(100),
-    kcal: integer('kcal').notNull().default(0),
-    fat: real('fat'),
-    fatSaturated: real('fat_saturated'),
-    carbs: real('carbs'),
-    sugar: real('sugar'),
-    fiber: real('fiber'),
-    protein: real('protein'),
-    salt: real('salt'),
-});
+export const ingredients = pgTable(
+    'ingredients',
+    {
+        id: serial('id').primaryKey(),
+        name: varchar('name', { length: 100 }).notNull(),
+        description: text('description').default(''),
+        refUnit: ingredientUnitColumn('ref_unit').notNull().default('gr'),
+        refQuantity: integer('ref_quantity').notNull().default(100),
+        kcal: integer('kcal').notNull().default(0),
+        fat: real('fat'),
+        fatSaturated: real('fat_saturated'),
+        carbs: real('carbs'),
+        sugar: real('sugar'),
+        fiber: real('fiber'),
+        protein: real('protein'),
+        salt: real('salt'),
+    },
+    (table) => {
+        return {
+            nameIdx: index('idx_ingredients_name_unaccent').using(
+                'gin',
+                table.name.op('gin_trgm_ops'),
+            ),
+        };
+    },
+);
 export type Ingredient = typeof ingredients.$inferSelect;
 export type NewIngredient = typeof ingredients.$inferInsert;
 export type IngredientUnit = Ingredient['refUnit'];

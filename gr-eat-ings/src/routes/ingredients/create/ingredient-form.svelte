@@ -10,6 +10,8 @@ import SuperDebug, {
 import { zodClient } from 'sveltekit-superforms/adapters';
 import { createIngredientSchema } from './schema';
 import { fromStore } from 'svelte/store';
+import { toast } from 'svelte-sonner';
+import { Toaster } from '$lib/components/ui/sonner';
 
 interface Props {
     data: SuperValidated<Infer<typeof createIngredientSchema>>;
@@ -21,8 +23,8 @@ const form = superForm(data, {
     validators: zodClient(createIngredientSchema),
     onUpdated: ({ form }) => {
         if (form.valid) {
-            console.log('Form submited', form);
             reset();
+            toast.success('Ingredient has been created');
         }
     },
 });
@@ -32,18 +34,32 @@ const { values: servings, valueErrors: servingsErrors } = arrayProxy(form, 'serv
 const formDataState = fromStore(formData);
 </script>
 
+<Toaster richColors />
 <form method="POST" use:enhance>
-  <Form.Field {form} name="name">
-    <Form.Control>
-      {#snippet children({ props })}
-        <Form.Label>Name</Form.Label>
-        <Input {...props} bind:value={$formData.name} />
-      {/snippet}
-    </Form.Control>
-    <Form.Description>This is the ingredient display name.</Form.Description>
-    <Form.FieldErrors />
-  </Form.Field>
-  <Form.Button>Submit</Form.Button>
+    <Form.Field {form} name="name">
+        <Form.Control>
+            {#snippet children({ props })}
+                <Form.Label>Name</Form.Label>
+                <Input {...props} bind:value={$formData.name} />
+            {/snippet}
+        </Form.Control>
+        <Form.Description>This is the ingredient display name.</Form.Description
+        >
+        <Form.FieldErrors />
+    </Form.Field>
+
+    <Form.Field {form} name="kcal">
+        <Form.Control>
+            {#snippet children({ props })}
+                <Form.Label>kcal</Form.Label>
+                <Input {...props} type="number" bind:value={$formData.kcal} />
+            {/snippet}
+        </Form.Control>
+        <Form.Description>Number of kcal per 100gr</Form.Description>
+        <Form.FieldErrors />
+    </Form.Field>
+
+    <Form.Button>Submit</Form.Button>
 </form>
 
 <SuperDebug data={formDataState} />
