@@ -25,15 +25,17 @@ export const actions: Actions = {
                 .values(form.data)
                 .returning({ ingredientId: ingredients.id });
             const ingredientId = created[0].ingredientId;
-            await tr
-                .insert(servings)
-                .values(
-                    form.data.servings.map((serving) => ({
-                        ...serving,
-                        ingredientId,
-                    })),
-                )
-                .execute();
+            if (form.data.servings.length > 0) {
+                await tr
+                    .insert(servings)
+                    .values(
+                        form.data.servings.map((serving) => ({
+                            ...serving,
+                            ingredientId,
+                        })),
+                    )
+                    .execute();
+            }
         });
 
         return { form };

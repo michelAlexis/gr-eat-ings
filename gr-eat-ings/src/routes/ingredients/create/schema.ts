@@ -22,9 +22,8 @@ export const createIngredientSchema = z.object({
 
     servings: z
         .array(createServingSchema)
-        .min(1)
-        .refine((arr) => arr.filter((s) => s.isDefault).length === 1, {
+        .refine((arr) => arr.length === 0 || arr.filter((s) => s.isDefault).length === 1, {
             message: 'Ingredient must have one default serving',
         })
-        .default([{ isDefault: true, label: 'Portion', quantity: 100 }]),
+        .default([]),
 });

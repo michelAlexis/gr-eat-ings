@@ -34,7 +34,7 @@ const { values: servings, valueErrors: servingsErrors } = arrayProxy(form, 'serv
 const formDataState = fromStore(formData);
 </script>
 
-<Toaster richColors />
+<Toaster richColors position="top-right" offset="60px" />
 <form method="POST" use:enhance>
     <Form.Field {form} name="name">
         <Form.Control>
@@ -43,8 +43,9 @@ const formDataState = fromStore(formData);
                 <Input {...props} bind:value={$formData.name} />
             {/snippet}
         </Form.Control>
-        <Form.Description>This is the ingredient display name.</Form.Description
-        >
+        <Form.Description>
+            This is the ingredient display name.
+        </Form.Description>
         <Form.FieldErrors />
     </Form.Field>
 
