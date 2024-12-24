@@ -27,6 +27,7 @@ const navItems = [
     { label: 'Lucia demo', href: '/demo/lucia/login' },
     { label: 'List ingredients', href: '/ingredients' },
     { label: 'Create ingredient', href: '/ingredients/create' },
+    { label: 'List recipes', href: '/recipes' },
 ];
 </script>
 
