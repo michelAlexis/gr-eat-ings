@@ -56,5 +56,5 @@ const formDataState = fromStore(formData);
     <Form.Button>Submit</Form.Button>
   </form>
 
-  <SuperDebug data={formDataState} />
+  <SuperDebug data={formData} />
 </div>

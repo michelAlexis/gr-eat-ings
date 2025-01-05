@@ -28,6 +28,7 @@ const navItems = [
     { label: 'List ingredients', href: '/ingredients' },
     { label: 'Create ingredient', href: '/ingredients/create' },
     { label: 'List recipes', href: '/recipes' },
+    { label: 'Create recipe', href: '/recipes/create' },
 ];
 </script>
 

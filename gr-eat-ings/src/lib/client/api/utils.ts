@@ -1,10 +1,11 @@
-export async function postJson<T>(url: string, body: unknown) {
+export async function postJson<TReturn>(url: string, body: unknown) {
     const r = await fetch(url, {
         body: JSON.stringify(body),
         method: 'POST',
         headers: {
-            'content-type': 'application/json',
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
         },
     });
-    return (await r.json()) as T;
+    return (await r.json()) as TReturn;
 }
