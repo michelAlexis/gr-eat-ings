@@ -1,17 +1,13 @@
 <script lang="ts">
-
-  interface Ingredient {
+interface Ingredient {
     id: number;
     label: string;
-  }
-  interface Props {
+}
+interface Props {
     value?: Ingredient | null;
-  }
+}
 
-  let {
-    value = $bindable(),
-  }: Props = $props();
-
+let { value = $bindable() }: Props = $props();
 </script>
 
 Hello

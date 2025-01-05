@@ -4,7 +4,7 @@ export async function postJson<TReturn>(url: string, body: unknown) {
         method: 'POST',
         headers: {
             'Content-type': 'application/json',
-            'Accept': 'application/json',
+            Accept: 'application/json',
         },
     });
     return (await r.json()) as TReturn;

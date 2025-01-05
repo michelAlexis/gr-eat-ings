@@ -1,55 +1,55 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1732389923855,
-      "tag": "0000_dapper_apocalypse",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1732897979568,
-      "tag": "0001_high_joshua_kane",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1733060345688,
-      "tag": "0002_ordinary_sister_grimm",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1734273562030,
-      "tag": "0003_marvelous_maginty",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1734275480355,
-      "tag": "0004_public_sway",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1734282870709,
-      "tag": "0005_wandering_the_enforcers",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1736084087213,
-      "tag": "0006_big_puma",
-      "breakpoints": true
-    }
-  ]
+    "version": "7",
+    "dialect": "postgresql",
+    "entries": [
+        {
+            "idx": 0,
+            "version": "7",
+            "when": 1732389923855,
+            "tag": "0000_dapper_apocalypse",
+            "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "7",
+            "when": 1732897979568,
+            "tag": "0001_high_joshua_kane",
+            "breakpoints": true
+        },
+        {
+            "idx": 2,
+            "version": "7",
+            "when": 1733060345688,
+            "tag": "0002_ordinary_sister_grimm",
+            "breakpoints": true
+        },
+        {
+            "idx": 3,
+            "version": "7",
+            "when": 1734273562030,
+            "tag": "0003_marvelous_maginty",
+            "breakpoints": true
+        },
+        {
+            "idx": 4,
+            "version": "7",
+            "when": 1734275480355,
+            "tag": "0004_public_sway",
+            "breakpoints": true
+        },
+        {
+            "idx": 5,
+            "version": "7",
+            "when": 1734282870709,
+            "tag": "0005_wandering_the_enforcers",
+            "breakpoints": true
+        },
+        {
+            "idx": 6,
+            "version": "7",
+            "when": 1736084087213,
+            "tag": "0006_big_puma",
+            "breakpoints": true
+        }
+    ]
 }
