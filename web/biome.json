@@ -11,7 +11,8 @@
             "**/.env.*",
             "**/pnpm-lock.yaml",
             "**/package-lock.json",
-            "**/yarn.lock"
+            "**/yarn.lock",
+            "src/lib/components/ui"
         ]
     },
     "vcs": {
@@ -55,7 +56,8 @@
             "linter": {
                 "rules": {
                     "style": {
-                        "useConst": "off"
+                        "useConst": "off",
+                        "useImportType": "off"
                     },
                     "suspicious": {
                         "noConfusingLabels": "off"
