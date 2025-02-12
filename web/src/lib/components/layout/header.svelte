@@ -1,35 +1,47 @@
 <script lang="ts">
-import { page } from '$app/stores';
+import { page } from '$app/state';
+import { authClient } from '$lib/client/auth';
+import type { Session } from '$lib/server/auth';
 import { cn } from '$lib/utils';
-import { fromStore } from 'svelte/store';
 import LogOut from 'lucide-svelte/icons/log-out';
-import { buttonVariants } from '../ui/button';
-import { Separator } from '../ui/separator';
 import { Avatar, AvatarFallback } from '../ui/avatar';
+import { buttonVariants } from '../ui/button';
 import {
     DropdownMenu,
-    DropdownMenuTrigger,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import type { SessionUser } from '$lib/server/auth';
-import { enhance } from '$app/forms';
+import { Separator } from '../ui/separator';
 
 interface Props {
-    user: SessionUser | null;
+    user: Session['user'] | null;
 }
 const { user }: Props = $props();
-const userInitial = $derived(user ? user.username.substring(0, 2) : null);
-const pageState = fromStore(page);
+const userInitial = $derived.by(() => {
+    if (!user) return null;
+    const split = user.name.split(' ');
+    if (split.length >= 2) {
+        return `${split[0][0]}${split[1][0]}`;
+    }
+    return user.name.substring(0, 2);
+});
 
 const navItems = [
     { label: 'Home', href: '/' },
-    { label: 'Lucia demo', href: '/demo/lucia/login' },
     { label: 'List ingredients', href: '/ingredients' },
     { label: 'Create ingredient', href: '/ingredients/create' },
     { label: 'List recipes', href: '/recipes' },
     { label: 'Create recipe', href: '/recipes/create' },
 ];
+
+async function signOut() {
+    await authClient.signOut({
+        fetchOptions: {
+            onSuccess: () => window.location.reload(),
+        },
+    });
+}
 </script>
 
 <header class="h-12 shadow-md flex items-center gap-3 px-3 py-2">
@@ -49,36 +61,36 @@ const navItems = [
         href={item.href}
         class={cn(
           "text-foreground/60 hover:text-foreground/80 transition-colors font-semibold",
-          item.href === pageState.current.url.pathname && "text-foreground",
+          item.href === page.url.pathname && "text-foreground",
         )}>{item.label}</a
       >
     {/each}
   </nav>
 
-  <div class="flex-1">
+  <div class="flex-1 flex items-center justify-end">
     {#if user}
       <DropdownMenu>
-        <DropdownMenuTrigger class="float-right">
+        <DropdownMenuTrigger>
           <Avatar>
             <AvatarFallback>{userInitial}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem>
-            <form method="post" action="/demo/lucia?/logout" use:enhance>
-              <button class="flex items-center gap-2">
-                <LogOut class="size-4" />
-                <span>Logout</span>
-              </button>
-            </form>
+            <button onclick={signOut} class="flex items-center gap-2">
+              <LogOut class="size-4" />
+              <span>Logout</span>
+            </button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     {:else}
-      <a
-        class={cn(buttonVariants({ variant: "link" }), "float-right")}
-        href="/demo/lucia">Login</a
-      >
+      <a class={cn(buttonVariants({ variant: "outline" }))} href="/register">
+        Register
+      </a>
+      <a class={cn(buttonVariants({ variant: "link" }))} href="/login">
+        Login
+      </a>
     {/if}
   </div>
 </header>
