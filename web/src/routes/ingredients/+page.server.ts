@@ -1,8 +1,8 @@
 import { db } from '$lib/server/db';
 import { ingredients } from '$lib/server/db/schema';
 import { fail } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
 import { eq } from 'drizzle-orm';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
     const data = await db

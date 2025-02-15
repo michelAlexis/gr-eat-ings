@@ -1,18 +1,18 @@
 <script lang="ts">
-import type { PageData } from './$types.js';
+import IngredientSearchCombobox from '$lib/components/ingredient-search-combobox.svelte';
+import { Button } from '$lib/components/ui/button/index.js';
 import * as Form from '$lib/components/ui/form';
 import { Input } from '$lib/components/ui/input';
-import IngredientSearchCombobox from '$lib/components/ingredient-search-combobox.svelte';
-import SuperDebug, { superForm, arrayProxy } from 'sveltekit-superforms';
-import { zodClient } from 'sveltekit-superforms/adapters';
-import { createRecipeSchema } from './schema';
-import { fromStore } from 'svelte/store';
-import { toast } from 'svelte-sonner';
 import { Toaster } from '$lib/components/ui/sonner';
 import { Textarea } from '$lib/components/ui/textarea/index.js';
-import { Button } from '$lib/components/ui/button/index.js';
-import { tick } from 'svelte';
 import Trash2 from 'lucide-svelte/icons/trash-2';
+import { tick } from 'svelte';
+import { toast } from 'svelte-sonner';
+import { fromStore } from 'svelte/store';
+import SuperDebug, { superForm, arrayProxy } from 'sveltekit-superforms';
+import { zodClient } from 'sveltekit-superforms/adapters';
+import type { PageData } from './$types.js';
+import { createRecipeSchema } from './schema';
 
 type Props = { data: PageData };
 let { data }: Props = $props();

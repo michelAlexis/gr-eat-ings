@@ -1,11 +1,14 @@
-import { db } from '$lib/server/db';
-import * as table from '$lib/server/db/schema';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import type { RequestEvent } from '@sveltejs/kit';
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { eq } from 'drizzle-orm';
+import { db } from './db';
+import * as table from './db/schema';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
+const DAY_IN_S = 60 * 60 * 24;
 
 export const sessionCookieName = 'auth-session';
 
@@ -80,3 +83,22 @@ export function deleteSessionTokenCookie(event: RequestEvent) {
         path: '/',
     });
 }
+
+export const auth = betterAuth({
+    database: drizzleAdapter(db, {
+        provider: 'pg',
+        schema: {
+            user: table.user,
+            account: table.account,
+            session: table.session,
+            verification: table.verification,
+        },
+    }),
+    advanced: {
+        cookiePrefix: 'gr-eat-ings',
+    },
+    emailAndPassword: {
+        enabled: true,
+    },
+});
+export type Session = typeof auth.$Infer.Session;
