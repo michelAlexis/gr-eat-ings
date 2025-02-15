@@ -1,8 +1,8 @@
 import { db } from '$lib/server/db/index.js';
 import { ingredients, servings } from '$lib/server/db/schema.js';
-import type { PageServerLoad, Actions } from './$types.js';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import type { Actions, PageServerLoad } from './$types.js';
 import { createIngredientSchema } from './schema.js';
 
 export const load: PageServerLoad = async () => {
