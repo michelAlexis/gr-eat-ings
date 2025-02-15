@@ -1,0 +1,585 @@
+{
+    "id": "a2c372dd-39de-4c8a-a29b-02400d1a1b59",
+    "prevId": "35d0c5e8-7a11-49d4-b98a-0df3950fe72d",
+    "version": "7",
+    "dialect": "postgresql",
+    "tables": {
+        "public.account": {
+            "name": "account",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "account_id": {
+                    "name": "account_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "provider_id": {
+                    "name": "provider_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "access_token": {
+                    "name": "access_token",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "refresh_token": {
+                    "name": "refresh_token",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "id_token": {
+                    "name": "id_token",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "access_token_expires_at": {
+                    "name": "access_token_expires_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "refresh_token_expires_at": {
+                    "name": "refresh_token_expires_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "scope": {
+                    "name": "scope",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "password": {
+                    "name": "password",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "account_user_id_user_id_fk": {
+                    "name": "account_user_id_user_id_fk",
+                    "tableFrom": "account",
+                    "tableTo": "user",
+                    "columnsFrom": ["user_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        },
+        "public.ingredients": {
+            "name": "ingredients",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "label": {
+                    "name": "label",
+                    "type": "varchar(100)",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "description": {
+                    "name": "description",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "default": "''"
+                },
+                "ref_unit": {
+                    "name": "ref_unit",
+                    "type": "ingredient_unit",
+                    "typeSchema": "public",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "'gr'"
+                },
+                "ref_quantity": {
+                    "name": "ref_quantity",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": 100
+                },
+                "kcal": {
+                    "name": "kcal",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": 0
+                },
+                "fat": {
+                    "name": "fat",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "fat_saturated": {
+                    "name": "fat_saturated",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "carbs": {
+                    "name": "carbs",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "sugar": {
+                    "name": "sugar",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "fiber": {
+                    "name": "fiber",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "protein": {
+                    "name": "protein",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "salt": {
+                    "name": "salt",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "create_by": {
+                    "name": "create_by",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {
+                "idx_ingredients_label_unaccent": {
+                    "name": "idx_ingredients_label_unaccent",
+                    "columns": [
+                        {
+                            "expression": "label",
+                            "isExpression": false,
+                            "asc": true,
+                            "nulls": "last",
+                            "opclass": "gin_trgm_ops"
+                        }
+                    ],
+                    "isUnique": false,
+                    "concurrently": false,
+                    "method": "gin",
+                    "with": {}
+                }
+            },
+            "foreignKeys": {
+                "ingredients_create_by_user_id_fk": {
+                    "name": "ingredients_create_by_user_id_fk",
+                    "tableFrom": "ingredients",
+                    "tableTo": "user",
+                    "columnsFrom": ["create_by"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        },
+        "public.recipe_ingredients": {
+            "name": "recipe_ingredients",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "recipe_id": {
+                    "name": "recipe_id",
+                    "type": "serial",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "ingredient_id": {
+                    "name": "ingredient_id",
+                    "type": "serial",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "quantity": {
+                    "name": "quantity",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "comment": {
+                    "name": "comment",
+                    "type": "varchar(200)",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "recipe_ingredients_recipe_id_recipes_id_fk": {
+                    "name": "recipe_ingredients_recipe_id_recipes_id_fk",
+                    "tableFrom": "recipe_ingredients",
+                    "tableTo": "recipes",
+                    "columnsFrom": ["recipe_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "recipe_ingredients_ingredient_id_ingredients_id_fk": {
+                    "name": "recipe_ingredients_ingredient_id_ingredients_id_fk",
+                    "tableFrom": "recipe_ingredients",
+                    "tableTo": "ingredients",
+                    "columnsFrom": ["ingredient_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        },
+        "public.recipes": {
+            "name": "recipes",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "label": {
+                    "name": "label",
+                    "type": "varchar(200)",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "ref_portions": {
+                    "name": "ref_portions",
+                    "type": "real",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "steps": {
+                    "name": "steps",
+                    "type": "text[]",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "'{}'::text[]"
+                },
+                "create_by": {
+                    "name": "create_by",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "recipes_create_by_user_id_fk": {
+                    "name": "recipes_create_by_user_id_fk",
+                    "tableFrom": "recipes",
+                    "tableTo": "user",
+                    "columnsFrom": ["create_by"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        },
+        "public.servings": {
+            "name": "servings",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "serial",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "label": {
+                    "name": "label",
+                    "type": "varchar(50)",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "quantity": {
+                    "name": "quantity",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": 1
+                },
+                "is_default": {
+                    "name": "is_default",
+                    "type": "boolean",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "default": false
+                },
+                "ingredient_id": {
+                    "name": "ingredient_id",
+                    "type": "serial",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "servings_ingredient_id_ingredients_id_fk": {
+                    "name": "servings_ingredient_id_ingredients_id_fk",
+                    "tableFrom": "servings",
+                    "tableTo": "ingredients",
+                    "columnsFrom": ["ingredient_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        },
+        "public.session": {
+            "name": "session",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "expires_at": {
+                    "name": "expires_at",
+                    "type": "timestamp with time zone",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "token": {
+                    "name": "token",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "ip_address": {
+                    "name": "ip_address",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "user_agent": {
+                    "name": "user_agent",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "session_user_id_user_id_fk": {
+                    "name": "session_user_id_user_id_fk",
+                    "tableFrom": "session",
+                    "tableTo": "user",
+                    "columnsFrom": ["user_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "no action",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "session_token_unique": {
+                    "name": "session_token_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["token"]
+                }
+            }
+        },
+        "public.user": {
+            "name": "user",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "email": {
+                    "name": "email",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "email_verified": {
+                    "name": "email_verified",
+                    "type": "boolean",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "image": {
+                    "name": "image",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {
+                "user_email_unique": {
+                    "name": "user_email_unique",
+                    "nullsNotDistinct": false,
+                    "columns": ["email"]
+                }
+            }
+        },
+        "public.verification": {
+            "name": "verification",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true
+                },
+                "identifier": {
+                    "name": "identifier",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "value": {
+                    "name": "value",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "expires_at": {
+                    "name": "expires_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": false
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "timestamp",
+                    "primaryKey": false,
+                    "notNull": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {}
+        }
+    },
+    "enums": {
+        "public.ingredient_unit": {
+            "name": "ingredient_unit",
+            "schema": "public",
+            "values": ["gr", "ml"]
+        }
+    },
+    "schemas": {},
+    "_meta": {
+        "columns": {},
+        "schemas": {},
+        "tables": {}
+    }
+}

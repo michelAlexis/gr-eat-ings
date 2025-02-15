@@ -86,6 +86,9 @@ export const ingredients = pgTable(
         fiber: real('fiber'),
         protein: real('protein'),
         salt: real('salt'),
+        createBy: text('create_by')
+            .notNull()
+            .references(() => user.id, { onDelete: 'cascade' }),
     },
     (table) => {
         return {
@@ -128,6 +131,9 @@ export const recipes = pgTable('recipes', {
     label: varchar('label', { length: 200 }).notNull(),
     refPortions: real('ref_portions'),
     steps: text('steps').array().notNull().default(sql`'{}'::text[]`),
+    createBy: text('create_by')
+        .notNull()
+        .references(() => user.id, { onDelete: 'cascade' }),
 });
 
 export const recipeIngredients = pgTable('recipe_ingredients', {
