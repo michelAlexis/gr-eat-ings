@@ -17,7 +17,7 @@ export const createIngredientSchema = z.object({
     carbs: z.number().nonnegative().nullable(),
     sugar: z.number().nonnegative().nullable(),
     fiber: z.number().nonnegative().nullable(),
-    portein: z.number().nonnegative().nullable(),
+    protein: z.number().nonnegative().nullable(),
     salt: z.number().nonnegative().nullable(),
 
     servings: z
