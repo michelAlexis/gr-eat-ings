@@ -6,6 +6,10 @@ declare global {
             user: import('$lib/server/auth').Session['user'] | null;
             session: import('$lib/server/auth').Session['session'] | null;
         }
+        interface Error {
+            message: string;
+            zodError?: import('zod').ZodFormattedError;
+        }
     }
 }
 

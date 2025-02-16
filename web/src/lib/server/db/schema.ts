@@ -86,6 +86,7 @@ export const ingredients = pgTable(
         fiber: real('fiber'),
         protein: real('protein'),
         salt: real('salt'),
+        barcode: varchar('barcode', { length: 14 }),
         createBy: text('create_by')
             .notNull()
             .references(() => user.id, { onDelete: 'cascade' }),

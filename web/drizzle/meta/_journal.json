@@ -64,6 +64,13 @@
             "when": 1739629481507,
             "tag": "0008_mean_scarlet_spider",
             "breakpoints": true
+        },
+        {
+            "idx": 9,
+            "version": "7",
+            "when": 1739715380289,
+            "tag": "0009_misty_absorbing_man",
+            "breakpoints": true
         }
     ]
 }
