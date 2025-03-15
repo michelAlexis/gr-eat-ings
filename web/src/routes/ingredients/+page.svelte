@@ -1,28 +1,36 @@
 <script lang="ts">
-import type { PageData } from './$types';
+import { Button } from '$lib/components/ui/button/index.js';
+import * as Table from '$lib/components/ui/table/index.js';
+import type { PageData } from './$types.js';
 
-export let data: PageData;
-
-$: ({ ingredients, totalElements } = data);
+type Props = { data: PageData };
+let { data }: Props = $props();
 </script>
 
-<div class="container mx-auto mt-4">
-    <div class="card">
-        <header class="h1 card-header">Ingredient list</header>
-        <section class="p-4">
-            <div>Total elements: {totalElements}</div>
-            {#each ingredients as ingredient}
-                <article>
-                    <div class="flex items-center gap-2">
-                        <a href={`/ingredients/${ingredient.id}`}>
-                            {ingredient.id} - {ingredient.name}
-                        </a>
-                        <form action="?/deleteIngredient&id={ingredient.id}" method="post">
-                            <button class="btn btn-sm variant-filled" type="submit">Delete</button>
-                        </form>
-                    </div>
-                </article>
-            {/each}
-        </section>
-    </div>
+<div class="container">
+  <Table.Root>
+    <Table.Caption>Simple list of ingredients</Table.Caption>
+    <Table.Header>
+      <Table.Row>
+        <Table.Head class="w-[40px]" />
+        <Table.Head class="w-[100px]">Id</Table.Head>
+        <Table.Head>Label</Table.Head>
+        <Table.Head>kcal</Table.Head>
+      </Table.Row>
+    </Table.Header>
+    <Table.Body>
+      {#each data.ingredients as ingredient (ingredient.id)}
+        <Table.Row>
+          <Table.Cell>
+            <form action="?/deleteIngredient&id={ingredient.id}" method="post">
+              <Button type="submit">Delete</Button>
+            </form>
+          </Table.Cell>
+          <Table.Cell>{ingredient.id}</Table.Cell>
+          <Table.Cell>{ingredient.label}</Table.Cell>
+          <Table.Cell>{ingredient.kcal}</Table.Cell>
+        </Table.Row>
+      {/each}
+    </Table.Body>
+  </Table.Root>
 </div>

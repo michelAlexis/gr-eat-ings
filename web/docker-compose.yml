@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres
+    container_name: gr-eat-ings-db
+    restart: always
+    ports:
+      - 5432:5432
+    environment: 
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: local

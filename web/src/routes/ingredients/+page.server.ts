@@ -1,42 +1,36 @@
 import { db } from '$lib/server/db';
-import { ingredients } from '$lib/server/schema';
-import { getPageParams } from '$lib/utils/page.utils';
+import { ingredients } from '$lib/server/db/schema';
 import { fail } from '@sveltejs/kit';
-import { count, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ url }) => {
-    const { first, size } = getPageParams(url, { maxSize: 20 });
-    const ingredientsPage = db
+export const load: PageServerLoad = async () => {
+    const data = await db
         .select({
             id: ingredients.id,
-            name: ingredients.name,
+            label: ingredients.label,
+            kcal: ingredients.kcal,
         })
         .from(ingredients)
-        .limit(size)
-        .offset(first);
-    const [{ totalElements }] = await db.select({ totalElements: count() }).from(ingredients);
-    return {
-        ingredients: await ingredientsPage,
-        totalElements,
-    };
+        .limit(100)
+        .orderBy(ingredients.label);
+    return { ingredients: data };
 };
 
-export const actions = {
+export const actions: Actions = {
     deleteIngredient: async ({ url }) => {
         const id = Number(url.searchParams.get('id'));
         if (!id || Number.isNaN(id)) {
             return fail(400, { message: 'No valid id provided' });
         }
         try {
-            console.log('Deleting ingredient with id', id);
+            console.log('Deleting ingredient', id);
             await db.delete(ingredients).where(eq(ingredients.id, id));
             console.log('Deleted ingredient');
+            return { success: true };
         } catch (err) {
             console.error(err);
             return fail(500, { message: 'Error while deleting ingredient' });
         }
-
-        return { status: 200 };
     },
-} satisfies Actions;
+};
