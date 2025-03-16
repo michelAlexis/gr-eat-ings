@@ -19,16 +19,16 @@
   import { zodClient } from "sveltekit-superforms/adapters";
   import type { PageData } from "./$types.js";
   import { createRecipeSchema } from "./schema";
-  import type { IngredientUnit } from "$lib/server/db/schema.js";
   import Label from "$lib/components/ui/label/label.svelte";
-  import Layout from "../../+layout.svelte";
+  import { IngredientSearchCombobox } from "$lib/components/ingredient-search-combobox";
+  import type { IngredientSearchResult } from "$lib/client/api/ingredients.js";
+  import IngredientQuantityInput from "$lib/components/ingredient-quantity-input.svelte";
 
   type Props = { data: PageData };
   let { data }: Props = $props();
-  type Ingredient = { id: number; label: string; refUnit: IngredientUnit };
   type IngredientItem = {
-    ingredient: Ingredient | null;
-    quantity: number;
+    ingredient: IngredientSearchResult | null;
+    quantity: number | null;
     comment: string | null;
   };
 
@@ -55,12 +55,11 @@
   const formDataState = fromStore(formData);
 
   let ingredientBuff = $state<IngredientItem>({
-    ingredient: { id: 1, label: "Chocolat", refUnit: "gr" },
-    quantity: 1,
+    ingredient: null,
+    quantity: null,
     comment: null,
   });
-
-  let selectedIngredients = $state<Ingredient[]>([]);
+  let selectedIngredients = $state<IngredientSearchResult[]>([]);
 
   function addIngredient() {
     if (ingredientBuff.ingredient) {
@@ -68,15 +67,19 @@
       ingredientsProxy.values.update((list) => {
         list.push({
           ingredientId: ingredientBuff.ingredient?.id,
-          quantity: ingredientBuff.ingredient,
+          quantity: ingredientBuff.quantity,
           comment: ingredientBuff.comment,
         });
         return list;
       });
+      ingredientBuff.ingredient = null;
+      ingredientBuff.quantity = null;
+      ingredientBuff.comment = null;
     }
   }
 
   function removeIngredient(index: number) {
+    selectedIngredients.splice(index, 1);
     ingredientsProxy.values.update((list) => {
       if (index < 0 || index > list.length - 1) {
         return list;
@@ -163,7 +166,7 @@
           >
             <div class="space-y-2">
               <Label class="font-bold">Ingredient</Label>
-              <Input
+              <IngredientSearchCombobox
                 bind:value={ingredientBuff.ingredient}
                 placeholder="Search ingredients..."
               />
@@ -171,25 +174,12 @@
 
             <div class="space-y-2">
               <Label class="font-bold">Quantity</Label>
-              {#if ingredientBuff.ingredient}
-                <div class="flex">
-                  <Input
-                    bind:value={ingredientBuff.quantity}
-                    placeholder="eg. 1"
-                    class="rounded-r-none border-r-0"
-                  />
-                  <div
-                    class="rounded-r-md bg-muted text-muted-foreground px-3 py-1 border"
-                  >
-                    {ingredientBuff.ingredient?.refUnit}
-                  </div>
-                </div>
-              {:else}
-                <Input
-                  bind:value={ingredientBuff.quantity}
-                  placeholder="eg. 1"
-                />
-              {/if}
+              <IngredientQuantityInput
+                bind:value={ingredientBuff.quantity}
+                unit={ingredientBuff.ingredient?.unit}
+                min={0}
+                placeholder="eg. 1"
+              />
             </div>
             <Button onclick={() => addIngredient()}>Add</Button>
           </div>
@@ -200,7 +190,8 @@
               {#snippet children({ props })}
                 <Form.Label>Ingredients</Form.Label>
                 {#each $ingredients as ingredient, i}
-                  <div>
+                  {@const ingredientItem = selectedIngredients[i]}
+                  <div class="flex gap-3">
                     <Button
                       variant="ghost"
                       class="px-1 py-0 h-6"
@@ -209,7 +200,15 @@
                     >
                       <Trash2 class="size-4" />
                     </Button>
-                    {ingredient.ingredientId}
+                    <span class="ml-4">
+                      {ingredientItem.name}
+                    </span>
+                    <IngredientQuantityInput
+                      bind:value={$formData.ingredients[i].quantity}
+                      unit={ingredientItem.unit}
+                      min={0}
+                      placeholder="eg. 1"
+                    />
                   </div>
                 {/each}
               {/snippet}

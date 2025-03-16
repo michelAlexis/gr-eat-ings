@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db';
-import { ingredients, servings } from '$lib/server/db/schema';
+import { ingredients, servings, type IngredientUnit } from '$lib/server/db/schema';
 import { fuzzySearchIngoreCase, likeIgnoreCase } from '$lib/server/db/utils';
 import { type ApiProduct, searchApiByBarcode } from '$lib/server/food-facts/api';
 import { BAD_REQUEST, UNAUTHORIZED } from '$lib/server/response.utils';
@@ -17,7 +17,7 @@ const ingredientSearchSchema = z.object({
 });
 export type IngredientSearch = z.infer<typeof ingredientSearchSchema>;
 
-export type IngredientSearchResult = { id: number; name: string; kcal: number };
+export type IngredientSearchResult = { id: number; name: string; unit: IngredientUnit; kcal: number };
 type SearchDbStart = { type: 'search-db-start' };
 type SearchDbNameResult = {
   type: 'search-db-name-result';
@@ -120,7 +120,12 @@ export const GET: RequestHandler = async ({ request, url, locals: { user } }) =>
           sendEvent({ type: 'search-api-barcode-not-found', barcode });
           return;
         }
-        throw new Error('Search API by name not implemented yet');
+        // throw new Error('Search API by name not implemented yet');
+        console.warn('Search API by name not implemented yet');
+        sendEvent({
+          type: 'search-db-name-result',
+          results: [],
+        });
       } catch (err) {
         console.error('Error while searching ingredient', err);
         sendEvent({
@@ -164,6 +169,7 @@ async function searchIngredientDbName(
       id: ingredients.id,
       name: ingredients.label,
       kcal: ingredients.kcal,
+        unit: ingredients.refUnit,
     })
     .from(ingredients)
     .where(
@@ -184,6 +190,7 @@ async function searchIngredientDbBarcode(barcode: string): Promise<IngredientSea
       id: ingredients.id,
       name: ingredients.label,
       kcal: ingredients.kcal,
+        unit: ingredients.refUnit,
     })
     .from(ingredients)
     .where(eq(ingredients.barcode, barcode))
@@ -214,6 +221,7 @@ async function createIngredientByProduct(product: ApiProduct): Promise<Ingredien
         id: ingredients.id,
         name: ingredients.label,
         kcal: ingredients.kcal,
+        unit: ingredients.refUnit,
       });
     const ingredient = created[0];
     if (0 > 0) {
