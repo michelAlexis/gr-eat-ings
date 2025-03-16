@@ -57,6 +57,20 @@
             "when": 1739308499105,
             "tag": "0007_hesitant_sasquatch",
             "breakpoints": true
+        },
+        {
+            "idx": 8,
+            "version": "7",
+            "when": 1739629481507,
+            "tag": "0008_mean_scarlet_spider",
+            "breakpoints": true
+        },
+        {
+            "idx": 9,
+            "version": "7",
+            "when": 1739715380289,
+            "tag": "0009_misty_absorbing_man",
+            "breakpoints": true
         }
     ]
 }

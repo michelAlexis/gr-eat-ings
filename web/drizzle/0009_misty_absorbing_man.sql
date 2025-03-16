@@ -1,0 +1,1 @@
+ALTER TABLE "ingredients" ADD COLUMN "barcode" varchar(14);

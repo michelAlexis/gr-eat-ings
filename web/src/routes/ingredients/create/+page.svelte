@@ -8,6 +8,7 @@ import SuperDebug, { superForm, arrayProxy } from 'sveltekit-superforms';
 import { zodClient } from 'sveltekit-superforms/adapters';
 import type { PageData } from './$types.js';
 import { createIngredientSchema } from './schema';
+import { searchIngredients } from '$lib/client/api/ingredients';
 
 type Props = { data: PageData };
 let { data }: Props = $props();
@@ -26,9 +27,25 @@ const form = superForm(data.form, {
 const { form: formData, errors, enhance, reset } = form;
 const { values: servings, valueErrors: servingsErrors } = arrayProxy(form, 'servings');
 const formDataState = fromStore(formData);
+
+let barcode = $state('5400113754398');
+
+function test() {
+    const ab = searchIngredients(barcode, (v) => console.log('new event', v));
+}
+function onkeydown(e: KeyboardEvent) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        test();
+    }
+}
 </script>
 
 <div class="container">
+  <div>
+    <input bind:value={barcode} {onkeydown} />
+    <button onclick={test} type="button">Search</button>
+  </div>
   <Toaster richColors position="top-right" offset="60px" />
   <form method="POST" use:enhance>
     <Form.Field {form} name="label">

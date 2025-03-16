@@ -12,17 +12,21 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-    default: async ({ request }) => {
+    default: async ({ request, locals }) => {
         const form = await superValidate(request, zod(createIngredientSchema));
+        const user = locals.user;
+        if (!user) {
+            return fail(401, { form, message: 'Unauthorized' });
+        }
 
         if (!form.valid) {
-            return fail(400, { form });
+            return fail(400, { form, message: 'Invalid form' });
         }
 
         await db.transaction(async (tr) => {
             const created = await tr
                 .insert(ingredients)
-                .values(form.data)
+                .values({ ...form.data, createBy: user.id })
                 .returning({ ingredientId: ingredients.id });
             const ingredientId = created[0].ingredientId;
             if (form.data.servings.length > 0) {
